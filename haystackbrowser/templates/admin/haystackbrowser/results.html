@@ -1,0 +1,57 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+<div id="content-main">
+    <div class="module" id="changelist">
+        {% block search %}{% endblock search %}
+
+        {% block filters %}
+        <div id="changelist-filter">
+
+        </div>
+        {% endblock filters %}
+
+        {% block result_list %}
+        {% if results %}
+        <table cellspacing="0" id="result_list">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>App</th>
+                    <th>Model</th>
+                    <th>Primary key</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr class="{% cycle 'row1' 'row2' %}">
+                    <td>{{ result.verbose_name }}</td>
+                    <td>{{ result.app_label }}</td>
+                    <td>{{ result.model_name }}</td>
+                    <td>{{ result.pk }}</td>
+                    <td><a href="{{ result.content_type }}/{{ result.pk }}/">View stored data</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        {% endblock result_list %}
+
+        {% block pagination %}
+        <p class="paginator">
+        {% if pagination_required %}
+            {% for i in page_range %}
+            {% if i == page_num %}
+            <span class="this-page">{{ i }}</span>
+            {% else %}
+            <a href="?p={{ i }}">{{ i }}</a>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+        {{ result_count }} {% ifequal result_count 1 %}{{ opts.verbose_name }}{% else %}{{ opts.verbose_name_plural }}{% endifequal %}
+        </p>
+        {% endblock pagination %}
+    </div>
+</div>
+{% endblock content %}
