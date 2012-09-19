@@ -10,7 +10,7 @@ from django.contrib import admin
 from django.contrib.admin.views.main import PAGE_VAR, ALL_VAR
 from django.conf import settings
 from haystack.query import SearchQuerySet
-from haystackbrowser.models import HaystackResultsProxy
+from haystackbrowser.models import HaystackResults
 
 try:
     from haystack.constants import DJANGO_CT, DJANGO_ID
