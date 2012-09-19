@@ -166,6 +166,9 @@ class HaystackResultsAdmin(object):
         context = {
             'original': sqs,
             'title': _('Indexed data'),
+            'app_label': self.model._meta.app_label,
+            'module_name': force_unicode(self.model._meta.verbose_name_plural),
+            'has_change_permission': self.has_change_permission(request, sqs)
         }
         return render_to_response('admin/haystackbrowser/view.html', context,
             context_instance=RequestContext(request))
