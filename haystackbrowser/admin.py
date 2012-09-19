@@ -10,8 +10,13 @@ from django.contrib import admin
 from django.contrib.admin.views.main import PAGE_VAR, ALL_VAR
 from django.conf import settings
 from haystack.query import SearchQuerySet
-from haystack.constants import DJANGO_CT, DJANGO_ID
 from haystackbrowser.models import HaystackResultsProxy
+
+try:
+    from haystack.constants import DJANGO_CT, DJANGO_ID
+except ImportError:
+    DJANGO_CT = 'django_ct'
+    DJANGO_ID = 'django_id'
 
 class HaystackResultsAdmin(object):
     fields = None
