@@ -1,8 +1,24 @@
 {% extends "admin/change_list.html" %}
+{% load i18n %}
+{% if not is_popup %}
+  {% block breadcrumbs %}
+    <div class="breadcrumbs">
+      <a href="../../">
+        {% trans "Home" %}
+      </a>
+       &rsaquo;
+       <a href="../">
+         {{ app_label|capfirst }}
+      </a>
+      &rsaquo;
+      {{ module_name|capfirst }}
+    </div>
+  {% endblock %}
+{% endif %}
 
 {% block content %}
 <div id="content-main">
-    <div class="module" id="changelist">
+    <div class="module {% if filtered %}filtered{% endif %}" id="changelist">
         {% block search %}{% endblock search %}
 
         {% block filters %}
@@ -13,28 +29,22 @@
 
         {% block result_list %}
         {% if results %}
+        <div class="results">
         <table cellspacing="0" id="result_list">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>App</th>
-                    <th>Model</th>
-                    <th>Primary key</th>
-                    <th>&nbsp;</th>
+                    {% include "admin/haystackbrowser/result_list_headers.html" %}
                 </tr>
             </thead>
             <tbody>
                 {% for result in results %}
                 <tr class="{% cycle 'row1' 'row2' %}">
-                    <td>{{ result.verbose_name }}</td>
-                    <td>{{ result.app_label }}</td>
-                    <td>{{ result.model_name }}</td>
-                    <td>{{ result.pk }}</td>
-                    <td><a href="{{ result.content_type }}/{{ result.pk }}/">View stored data</a></td>
+                    {% include "admin/haystackbrowser/result.html" %}
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        </div>
         {% endif %}
         {% endblock result_list %}
 
@@ -45,7 +55,7 @@
             {% if i == page_num %}
             <span class="this-page">{{ i }}</span>
             {% else %}
-            <a href="?p={{ i }}">{{ i }}</a>
+            <a href="?p={{ i }}" {% if forloop.last %}class="end"{% endif %}>{{ i }}</a>
             {% endif %}
             {% endfor %}
         {% endif %}

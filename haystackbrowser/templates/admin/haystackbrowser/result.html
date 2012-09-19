@@ -1,0 +1,7 @@
+<td>{{ result.verbose_name }}</td>
+<td>{{ result.get_app_url }}</td>
+<td>{{ result.get_model_url }}</td>
+<td>{{ result.get_pk_url }}</td>
+{% if filtered %}<td>{{ result.score }}</td>{% endif %}
+<td><a href="{{ result.content_type }}/{{ result.pk }}/">View stored data</a></td>
+
