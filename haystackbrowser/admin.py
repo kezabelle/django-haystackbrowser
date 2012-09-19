@@ -13,6 +13,7 @@ from django.contrib.admin.views.main import PAGE_VAR, ALL_VAR
 from django.conf import settings
 from haystack.query import SearchQuerySet
 from haystackbrowser.models import HaystackResults
+from haystackbrowser.forms import PreSelectedModelSearchForm
 
 try:
     from haystack.constants import DJANGO_CT, DJANGO_ID
@@ -134,9 +135,14 @@ class HaystackResultsAdmin(object):
         return [klass(self.admin_site.name, x) for x in object_list]
 
     def index(self, request):
-        sqs = SearchQuerySet().all().load_all()
-        paginator = Paginator(sqs, self.get_results_per_page(request))
+        sqs = SearchQuerySet()
+        form = PreSelectedModelSearchForm(request.GET or None, searchqueryset=sqs, load_all=False)
+        if request.GET.get('q') and form.is_valid():
+            sqs = form.search()
+        else:
+            sqs = sqs.all()
         try:
+            paginator = Paginator(sqs, self.get_results_per_page(request))
             page_qs = request.GET.get(self.get_paginator_var(request), 1)
             page = paginator.page(int(page_qs))
         except InvalidPage:
@@ -151,6 +157,8 @@ class HaystackResultsAdmin(object):
             'title': self.model._meta.verbose_name_plural,
             'root_path': self.admin_site.root_path,
             'app_label': self.model._meta.app_label,
+            'filtered': True,
+            'form': form,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
                 }
         return render_to_response('admin/haystackbrowser/result_list.html', context,

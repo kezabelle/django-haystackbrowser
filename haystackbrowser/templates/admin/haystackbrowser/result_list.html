@@ -19,14 +19,25 @@
 {% block content %}
 <div id="content-main">
     <div class="module {% if filtered %}filtered{% endif %}" id="changelist">
-        {% block search %}{% endblock search %}
+            {% block search %}{% endblock search %}
 
         {% block filters %}
         <div id="changelist-filter">
             <h2>{% trans "Filter" %}</h2>
 
-            <h3>{% trans "By model" %}</h3>
-        </div>
+            <h3>{% trans "Contains" %}</h3>
+            <form id="changelist-search" action="" method="get">
+
+            <div style="padding-left: 10px;">
+                {{ form.q }}
+                <input type="submit" value="{% trans 'Search' %}" />
+            </div>
+            <script type="text/javascript">document.getElementById("{{ form.q.id_for_label }}").focus();</script>
+
+            <h3>{% trans "Only models" %}</h3>
+            {{ form.models }}
+            </form>
+            </div>
         {% endblock filters %}
 
         {% block result_list %}
@@ -35,13 +46,13 @@
         <table cellspacing="0" id="result_list">
             <thead>
                 <tr>
-                    {% include "admin/haystackbrowser/result_list_headers.html" only %}
+                    {% include "admin/haystackbrowser/result_list_headers.html" with filtered=filtered only %}
                 </tr>
             </thead>
             <tbody>
                 {% for result in results %}
                 <tr class="{% cycle 'row1' 'row2' %}">
-                    {% include "admin/haystackbrowser/result.html" with result=result only %}
+                    {% include "admin/haystackbrowser/result.html" with result=result filtered=filtered only %}
                 </tr>
                 {% endfor %}
             </tbody>
