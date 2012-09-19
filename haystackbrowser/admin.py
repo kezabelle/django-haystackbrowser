@@ -99,7 +99,7 @@ class HaystackResultsAdmin(object):
             'app_label': self.model._meta.app_label,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
                 }
-        return render_to_response('admin/haystackbrowser/results.html', context,
+        return render_to_response('admin/haystackbrowser/result_list.html', context,
             context_instance=RequestContext(request))
 
     def view(self, request, content_type, pk):
@@ -114,4 +114,4 @@ class HaystackResultsAdmin(object):
         }
         return render_to_response('admin/haystackbrowser/view.html', context,
             context_instance=RequestContext(request))
-admin.site.register(HaystackResultsProxy, HaystackResultsAdmin)
+admin.site.register(HaystackResults, HaystackResultsAdmin)
