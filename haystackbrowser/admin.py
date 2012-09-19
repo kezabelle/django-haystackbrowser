@@ -78,6 +78,15 @@ class HaystackResultsAdmin(object):
     def get_all_results_var(self, request):
         return ALL_VAR
 
+    def get_searchresult_wrapper(self):
+        class SearchResultWrapper(object):
+            def __init__(self, admin_site, obj):
+                self.output_url = '<a href="%s">%s</a>'
+                self.admin = admin_site
+                self.object = obj
+    def get_wrapped_search_results(self, object_list):
+        klass = self.get_searchresult_wrapper()
+        return [klass(self.admin_site.name, x) for x in object_list]
     def index(self, request):
         sqs = SearchQuerySet().all().load_all()
         item_count = sqs.count()
@@ -88,7 +97,7 @@ class HaystackResultsAdmin(object):
         except InvalidPage:
             raise Http404
         context = {
-            'results': page.object_list,
+            'results': self.get_wrapped_search_results(page.object_list),
             'pagination_required': page.has_other_pages(),
             'page_range': paginator.page_range,
             'page_num': page.number,
