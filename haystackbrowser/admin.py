@@ -135,7 +135,6 @@ class HaystackResultsAdmin(object):
 
     def index(self, request):
         sqs = SearchQuerySet().all().load_all()
-        item_count = sqs.count()
         paginator = Paginator(sqs, self.get_results_per_page(request))
         try:
             page_qs = request.GET.get(self.get_paginator_var(request), 1)
@@ -147,7 +146,7 @@ class HaystackResultsAdmin(object):
             'pagination_required': page.has_other_pages(),
             'page_range': paginator.page_range,
             'page_num': page.number,
-            'result_count': item_count,
+            'result_count': paginator.count,
             'opts': self.model._meta,
             'title': self.model._meta.verbose_name_plural,
             'root_path': self.admin_site.root_path,
