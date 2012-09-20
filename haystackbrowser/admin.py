@@ -102,12 +102,8 @@ class HaystackResultsAdmin(object):
         return filtered_settings
 
     def index(self, request):
-        sqs = SearchQuerySet()
-        form = PreSelectedModelSearchForm(request.GET or None, searchqueryset=sqs, load_all=False)
-        if request.GET.get('q') and form.is_valid():
-            sqs = form.search()
-        else:
-            sqs = sqs.all()
+        form = PreSelectedModelSearchForm(request.GET or None, searchqueryset=SearchQuerySet(), load_all=False)
+        sqs = form.search()
         try:
             paginator = Paginator(sqs, self.get_results_per_page(request))
             page_qs = request.GET.get(self.get_paginator_var(request), 1)
