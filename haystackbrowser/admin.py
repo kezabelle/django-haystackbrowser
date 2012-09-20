@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.contrib import admin
 from django.contrib.admin.views.main import PAGE_VAR, ALL_VAR
 from django.conf import settings
+from django.core.management.commands.diffsettings import module_to_dict
 from haystack.query import SearchQuerySet
 from haystackbrowser.models import HaystackResults, SearchResultWrapper
 from haystackbrowser.forms import PreSelectedModelSearchForm
@@ -86,6 +87,17 @@ class HaystackResultsAdmin(object):
         klass = self.get_searchresult_wrapper()
         return [klass(x, self.admin_site.name) for x in object_list]
 
+    def get_settings(self):
+        filtered_settings = {}
+        searching_for = u'HAYSTACK_'
+        all_settings = module_to_dict(settings._wrapped)
+        for setting_name, setting_value in all_settings.items():
+
+            if setting_name.startswith(searching_for):
+                setting_name = setting_name.replace(searching_for, '').replace('_', ' ')
+                filtered_settings[setting_name] = setting_value
+        return filtered_settings
+
     def index(self, request):
         sqs = SearchQuerySet()
         form = PreSelectedModelSearchForm(request.GET or None, searchqueryset=sqs, load_all=False)
@@ -127,6 +139,7 @@ class HaystackResultsAdmin(object):
             'title': _('View stored data for this %s') % force_unicode(sqs.verbose_name),
             'app_label': self.model._meta.app_label,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
+            'haystack_settings': self.get_settings(),
             'has_change_permission': self.has_change_permission(request, sqs)
         }
         return render_to_response('admin/haystackbrowser/view.html', context,

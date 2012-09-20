@@ -71,5 +71,23 @@
         </div>
         {% endfor %}
     </fieldset>
+    <fieldset class="module aligned">
+        <h2>{% trans "Haystack settings" %}</h2>
+        <div class="description">
+            <p>
+            {% trans "All relevant settings found in the Django settings module." %}
+            </p>
+        </div>
+        {% for key, value in haystack_settings.items %}
+        <div class="form-row">
+            <label for="{{ key }}">{{ key }}</label>
+            <p id="{{ key }}">{{ value }}</p>
+        </div>
+        {% empty %}
+        <div class="form-row errors">
+            <p class="help">{% trans "No settings found. Which is probably a bad sign." %}</p>
+        </div>
+        {% endfor %}
+    </fieldset>
 </div>
 {% endblock %}
