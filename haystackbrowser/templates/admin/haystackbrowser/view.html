@@ -39,7 +39,7 @@
         {% for key, value in original.get_stored_fields.items %}
         <div class="form-row">
             <label for="{{ key }}">{{ key }}</label>
-            <span id="{{ key }}">{{ value }}</span>
+            <p id="{{ key }}">{{ value }}</p>
         </div>
         {% empty %}
         <div class="form-row errors">
@@ -57,7 +57,7 @@
         {% for key, value in original.get_additional_fields.items %}
         <div class="form-row">
             <label for="{{ key }}">{{ key }}</label>
-            <span id="{{ key }}">{{ value }}</span>
+            <p id="{{ key }}">{{ value }}</p>
         </div>
         {% empty %}
         <div class="form-row errors">
