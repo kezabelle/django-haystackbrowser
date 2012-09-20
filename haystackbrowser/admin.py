@@ -102,13 +102,17 @@ class HaystackResultsAdmin(object):
         return filtered_settings
 
     def index(self, request):
+        page_var = self.get_paginator_var(request)
         form = PreSelectedModelSearchForm(request.GET or None, searchqueryset=SearchQuerySet(), load_all=False)
         sqs = form.search()
         try:
             paginator = Paginator(sqs, self.get_results_per_page(request))
-            page_qs = request.GET.get(self.get_paginator_var(request), 1)
+            page_qs = request.GET.get(page_var, 1)
             page = paginator.page(int(page_qs))
-        except InvalidPage:
+        except (InvalidPage, ValueError):
+            # paginator.page may raise InvalidPage if we've gone too far
+            # meanwhile, casting the querystring parameter may raise ValueError
+            # if it's None, or '', or other silly input.
             raise Http404
         context = {
             'results': self.get_wrapped_search_results(page.object_list),
@@ -122,8 +126,11 @@ class HaystackResultsAdmin(object):
             'app_label': self.model._meta.app_label,
             'filtered': True,
             'form': form,
+            'params': dict(request.GET.items()),
+            'search_var': self.get_search_var(request),
+            'page_var': page_var,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
-                }
+        }
         return render_to_response('admin/haystackbrowser/result_list.html', context,
             context_instance=RequestContext(request))
 
