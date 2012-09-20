@@ -1,5 +1,4 @@
 from django.core.paginator import Paginator, InvalidPage
-from django.core.urlresolvers import NoReverseMatch, reverse
 from django.utils.encoding import force_unicode
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -12,7 +11,7 @@ from django.contrib import admin
 from django.contrib.admin.views.main import PAGE_VAR, ALL_VAR
 from django.conf import settings
 from haystack.query import SearchQuerySet
-from haystackbrowser.models import HaystackResults
+from haystackbrowser.models import HaystackResults, SearchResultWrapper
 from haystackbrowser.forms import PreSelectedModelSearchForm
 
 try:
@@ -82,57 +81,11 @@ class HaystackResultsAdmin(object):
         return ALL_VAR
 
     def get_searchresult_wrapper(self):
-        class SearchResultWrapper(object):
-            def __init__(self, admin_site, obj):
-                self.output_url = '<a href="%s">%s</a>'
-                self.admin = admin_site
-                self.object = obj
-
-            def get_app_url(self):
-                try:
-                    url = reverse('%s:app_list' % self.admin, kwargs={
-                        'app_label': self.object.app_label,
-                        })
-                    output = self.output_url % (
-                        url,
-                        self.object.app_label
-                    )
-                except NoReverseMatch:
-                    output = self.object.app_label
-                return mark_safe(output)
-
-            def get_model_url(self):
-                try:
-                    parts = (self.admin, self.object.app_label, self.object.model_name)
-                    url = reverse('%s:%s_%s_changelist' % parts)
-                    output = self.output_url % (
-                        url,
-                        self.object.model_name
-                    )
-                except NoReverseMatch:
-                    output = self.object.model_name
-                return mark_safe(output)
-
-            def get_pk_url(self):
-                try:
-                    parts = (self.admin, self.object.app_label, self.object.model_name)
-                    url = reverse('%s:%s_%s_change' % parts, args=(self.object.pk,))
-                    output = self.output_url % (
-                        url,
-                        self.object.pk
-                    )
-                except NoReverseMatch:
-                    output = self.object.pk
-                return mark_safe(output)
-
-            def __getattr__(self, attr):
-                return getattr(self.object, attr)
-
         return SearchResultWrapper
 
     def get_wrapped_search_results(self, object_list):
         klass = self.get_searchresult_wrapper()
-        return [klass(self.admin_site.name, x) for x in object_list]
+        return [klass(x, self.admin_site.name) for x in object_list]
 
     def index(self, request):
         sqs = SearchQuerySet()
