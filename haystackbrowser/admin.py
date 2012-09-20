@@ -7,7 +7,7 @@ from django.utils.functional import update_wrapper
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import admin
-from django.contrib.admin.views.main import PAGE_VAR, ALL_VAR
+from django.contrib.admin.views.main import PAGE_VAR, ALL_VAR, SEARCH_VAR
 from django.conf import settings
 from django.core.management.commands.diffsettings import module_to_dict
 from haystack.query import SearchQuerySet
@@ -76,6 +76,9 @@ class HaystackResultsAdmin(object):
 
     def get_paginator_var(self, request):
         return PAGE_VAR
+
+    def get_search_var(self, request):
+        return SEARCH_VAR
 
     def get_all_results_var(self, request):
         return ALL_VAR
