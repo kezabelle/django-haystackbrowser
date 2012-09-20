@@ -1,6 +1,5 @@
 from django.core.paginator import Paginator, InvalidPage
 from django.utils.encoding import force_unicode
-from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
 from django.db import models
@@ -125,7 +124,7 @@ class HaystackResultsAdmin(object):
             raise Http404
         context = {
             'original': sqs,
-            'title': _('Indexed data'),
+            'title': _('View stored data for this %s') % force_unicode(sqs.verbose_name),
             'app_label': self.model._meta.app_label,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
             'has_change_permission': self.has_change_permission(request, sqs)
