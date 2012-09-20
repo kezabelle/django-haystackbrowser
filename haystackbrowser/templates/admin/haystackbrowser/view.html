@@ -15,8 +15,14 @@
      <a href="../../">
          {{ module_name|capfirst }}
      </a>
+     &rsaquo;
+     <a href="../../?models={{ original.content_type }}">
+         {{ original.verbose_name }}
+    </a>
      {% else %}
      {{ module_name|capfirst }}
+     &rsaquo;
+     {{ original.verbose_name }}
      {% endif %}
      &rsaquo;
      {% trans "View stored data" %}
