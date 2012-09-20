@@ -52,6 +52,14 @@ class SearchResultWrapper(object):
             output = self.object.pk
         return mark_safe(output)
 
+    def get_additional_fields(self):
+        additional_fields = {}
+        stored_fields = self.get_stored_fields().keys()
+        for key, value in self.object.get_additional_fields().items():
+            if key not in stored_fields:
+                additional_fields[key] = value
+        return additional_fields
+
     def __getattr__(self, attr):
         return getattr(self.object, attr)
 
