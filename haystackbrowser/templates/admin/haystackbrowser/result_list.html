@@ -43,6 +43,7 @@
                 {% endif %}
             {% endfor %}
             </form>
+            <div style="padding-left: 10px;">{% if request.GET.models %}<span class="small quiet"><a href="{{ request.path_info }}">clear filters</a></span>{% endif %}</div>
             </div>
         {% endblock filters %}
 
