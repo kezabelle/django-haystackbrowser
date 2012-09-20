@@ -37,7 +37,7 @@
             </p>
         </div>
         {% for key, value in original.get_stored_fields.items %}
-        <div class="form-row">
+        <div class="form-row field-{{ key }}">
             <label for="{{ key }}">{{ key }}</label>
             <p id="{{ key }}">{{ value }}</p>
         </div>
