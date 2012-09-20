@@ -120,7 +120,7 @@ class HaystackResultsAdmin(object):
     def view(self, request, content_type, pk):
         query = {DJANGO_ID: pk, DJANGO_CT: content_type}
         try:
-            sqs = SearchQuerySet().filter(**query)[:1][0]
+            sqs = self.get_wrapped_search_results(SearchQuerySet().filter(**query)[:1])[0]
         except IndexError:
             raise Http404
         context = {
