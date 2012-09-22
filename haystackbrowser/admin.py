@@ -1,7 +1,6 @@
 from django.core.paginator import Paginator, InvalidPage
 from django.utils.encoding import force_unicode
 from django.utils.translation import ugettext_lazy as _
-from django.http import Http404
 from django.http import Http404, HttpResponseRedirect
 from django.db import models
 from django.utils.functional import update_wrapper
@@ -12,6 +11,7 @@ from django.contrib.admin.views.main import PAGE_VAR, ALL_VAR, SEARCH_VAR
 from django.conf import settings
 from django.core.management.commands.diffsettings import module_to_dict
 from haystack.query import SearchQuerySet
+from haystack.forms import model_choices
 from haystackbrowser.models import HaystackResults, SearchResultWrapper
 from haystackbrowser.forms import PreSelectedModelSearchForm
 
@@ -20,6 +20,26 @@ try:
 except ImportError:
     DJANGO_CT = 'django_ct'
     DJANGO_ID = 'django_id'
+
+
+def get_query_string(query_params, new_params=None, remove=None):
+    if new_params is None:
+        new_params = {}
+    if remove is None:
+        remove = []
+    params = query_params.copy()
+    for r in remove:
+        for k in list(params):
+            if k.startswith(r):
+                del params[k]
+    for k, v in new_params.items():
+        if v is None:
+            if k in params:
+                del params[k]
+        else:
+            params[k] = v
+    return '?%s' % params.urlencode()
+
 
 class HaystackResultsAdmin(object):
     fields = None
@@ -91,6 +111,9 @@ class HaystackResultsAdmin(object):
         klass = self.get_searchresult_wrapper()
         return [klass(x, self.admin_site.name) for x in object_list]
 
+    def get_current_query_string(self, request):
+        return get_query_string(request.GET)
+
     def get_settings(self):
         filtered_settings = {}
         searching_for = u'HAYSTACK_'
@@ -105,13 +128,19 @@ class HaystackResultsAdmin(object):
     def index(self, request):
         page_var = self.get_paginator_var(request)
         form = PreSelectedModelSearchForm(request.GET or None, load_all=False)
+
+        # Make sure there are some models indexed
+        available_models = model_choices()
+        if len(available_models) < 0:
+            raise Http404
+
         # We've not selected any models, so we're going to redirect and select
         # all of them. This will bite me in the ass if someone searches for a string
         # but no models, but I don't know WTF they'd expect to return, anyway.
         # Note that I'm only doing this to sidestep this issue:
         # https://gist.github.com/3766607
         if 'models' not in request.GET.keys():
-            find_all_models = ['&amp;models=%s' % x[0] for x in model_choices()]
+            find_all_models = ['&models=%s' % x[0] for x in available_models]
             find_all_models = ''.join(find_all_models)
             return HttpResponseRedirect('%s?%s' % (request.path_info, find_all_models))
 
@@ -139,6 +168,8 @@ class HaystackResultsAdmin(object):
             'filtered': True,
             'form': form,
             'params': dict(request.GET.items()),
+            'params': request.GET.items(),
+            'query_string': self.get_current_query_string(request),
             'search_var': self.get_search_var(request),
             'page_var': page_var,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
