@@ -75,7 +75,7 @@
             {% if i == page_num %}
             <span class="this-page">{{ i }}</span>
             {% else %}
-            <a href="?p={{ i }}" {% if forloop.last %}class="end"{% endif %}>{{ i }}</a>
+            <a href="{{ query_string }}&p={{ i }}" {% if forloop.last %}class="end"{% endif %}>{{ i }}</a>
             {% endif %}
             {% endfor %}
         {% endif %}
