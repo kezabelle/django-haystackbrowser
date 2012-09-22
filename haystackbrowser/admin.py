@@ -2,6 +2,7 @@ from django.core.paginator import Paginator, InvalidPage
 from django.utils.encoding import force_unicode
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.db import models
 from django.utils.functional import update_wrapper
 from django.shortcuts import render_to_response
@@ -104,11 +105,22 @@ class HaystackResultsAdmin(object):
     def index(self, request):
         page_var = self.get_paginator_var(request)
         form = PreSelectedModelSearchForm(request.GET or None, load_all=False)
-        sqs = form.search()
+        # We've not selected any models, so we're going to redirect and select
+        # all of them. This will bite me in the ass if someone searches for a string
+        # but no models, but I don't know WTF they'd expect to return, anyway.
+        # Note that I'm only doing this to sidestep this issue:
+        # https://gist.github.com/3766607
+        if 'models' not in request.GET.keys():
+            find_all_models = ['&amp;models=%s' % x[0] for x in model_choices()]
+            find_all_models = ''.join(find_all_models)
+            return HttpResponseRedirect('%s?%s' % (request.path_info, find_all_models))
+
         try:
-            paginator = Paginator(sqs, self.get_results_per_page(request))
-            page_qs = request.GET.get(page_var, 1)
-            page = paginator.page(int(page_qs))
+            sqs = form.search()
+            page_no = int(request.GET.get(page_var, 1))
+            results_per_page = self.get_results_per_page(request)
+            paginator = Paginator(sqs, results_per_page)
+            page = paginator.page(page_no)
         except (InvalidPage, ValueError):
             # paginator.page may raise InvalidPage if we've gone too far
             # meanwhile, casting the querystring parameter may raise ValueError
