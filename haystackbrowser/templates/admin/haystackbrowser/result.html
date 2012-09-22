@@ -1,7 +1,25 @@
 <td>{{ result.verbose_name }}</td>
-<td>{{ result.get_app_url }}</td>
-<td>{{ result.get_model_url }}</td>
-<td>{{ result.get_pk_url }}</td>
+<td>
+    {% if result.get_app_url %}
+    <a href="{{ result.get_app_url }}">{{ result.app_label }}</a>
+    {% else %}
+    {{ result.app_label }}
+    {% endif %}
+</td>
+<td>
+    {% if result.get_model_url %}
+    <a href="{{ result.get_model_url }}">{{ result.model_name }}</a>
+    {% else %}
+    {{ result.model_name }}
+    {% endif %}
+</td>
+<td>
+    {% if result.get_pk_url %}
+    <a href="{{ result.get_pk_url }}">{{ result.pk }}</a>
+    {% else %}
+    {{ result.pk }}
+    {% endif %}
+</td>
 {% if filtered %}<td>{{ result.score }}</td>{% endif %}
 <td><a href="{{ result.content_type }}/{{ result.pk }}/">View stored data</a></td>
 

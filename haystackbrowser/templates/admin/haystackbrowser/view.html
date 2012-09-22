@@ -30,18 +30,19 @@
 {% endblock %}
 {% endif %}
 
+
 {% block content %}
     {% block object-tools %}
         {% if original %}
         <ul class="object-tools">
-            {% if original.get_app_url != original.app_label %}
-            <li>{{ original.get_app_url }}</li>
+            {% if original.get_app_url %}
+            <li><a href="{{ original.get_app_url }}">{% blocktrans with app=original.app_label %}{{ app }} admin index{% endblocktrans %}</a></li>
             {% endif %}
-            {% if original.get_model_url != original.model_name %}
-            <li>{{ original.get_model_url }}</li>
+            {% if original.get_model_url %}
+            <li><a href="{{ original.get_model_url }}">{% blocktrans with model=original.verbose_name %}{{ model }} admin{% endblocktrans %}</a></li>
             {% endif %}
-            {% if original.get_pk_url != original.pk %}
-            <li>{{ original.get_pk_url }}</li>
+            {% if original.get_pk_url %}
+            <li><a href="{{ original.get_pk_url }}">{% blocktrans with model=original.verbose_name %}edit this {{ model }}{% endblocktrans %}</a></li>
             {% endif %}
         </ul>
         {% endif %}

@@ -11,46 +11,30 @@ class HaystackResults(models.Model):
 
 class SearchResultWrapper(object):
     def __init__(self, obj, admin_site=None):
-        self.output_url = '<a href="%s">%s</a>'
         self.admin = admin_site
         self.object = obj
 
     def get_app_url(self):
         try:
-            url = reverse('%s:app_list' % self.admin, kwargs={
+            return reverse('%s:app_list' % self.admin, kwargs={
                 'app_label': self.object.app_label,
-                })
-            output = self.output_url % (
-                url,
-                self.object.app_label
-            )
+            })
         except NoReverseMatch:
-            output = self.object.app_label
-        return mark_safe(output)
+            return None
 
     def get_model_url(self):
         try:
             parts = (self.admin, self.object.app_label, self.object.model_name)
-            url = reverse('%s:%s_%s_changelist' % parts)
-            output = self.output_url % (
-                url,
-                self.object.model_name
-            )
+            return reverse('%s:%s_%s_changelist' % parts)
         except NoReverseMatch:
-            output = self.object.model_name
-        return mark_safe(output)
+            return None
 
     def get_pk_url(self):
         try:
             parts = (self.admin, self.object.app_label, self.object.model_name)
-            url = reverse('%s:%s_%s_change' % parts, args=(self.object.pk,))
-            output = self.output_url % (
-                url,
-                self.object.pk
-            )
+            return reverse('%s:%s_%s_change' % parts, args=(self.object.pk,))
         except NoReverseMatch:
-            output = self.object.pk
-        return mark_safe(output)
+            return None
 
     def get_additional_fields(self):
         additional_fields = {}
