@@ -31,6 +31,21 @@
 {% endif %}
 
 {% block content %}
+    {% block object-tools %}
+        {% if original %}
+        <ul class="object-tools">
+            {% if original.get_app_url != original.app_label %}
+            <li>{{ original.get_app_url }}</li>
+            {% endif %}
+            {% if original.get_model_url != original.model_name %}
+            <li>{{ original.get_model_url }}</li>
+            {% endif %}
+            {% if original.get_pk_url != original.pk %}
+            <li>{{ original.get_pk_url }}</li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    {% endblock %}
 <div id="content-main">
     <fieldset class="module aligned">
         <h2>{% trans "Stored fields" %}</h2>
