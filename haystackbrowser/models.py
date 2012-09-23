@@ -44,6 +44,10 @@ class SearchResultWrapper(object):
                 additional_fields[key] = value
         return additional_fields
 
+    def get_content(self):
+        field = self.object.searchindex.get_content_field()
+        return getattr(self.object, field)
+
     def __getattr__(self, attr):
         return getattr(self.object, attr)
 
