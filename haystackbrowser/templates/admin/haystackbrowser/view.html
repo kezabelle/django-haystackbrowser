@@ -11,19 +11,23 @@
          {{ app_label|capfirst|escape }}
      </a>
      &rsaquo;
-     {% if has_change_permission %}
      <a href="../../">
          {{ module_name|capfirst }}
      </a>
+     {% if request.GET.q %}
+     &rsaquo;
+     <a href="../../?q={{ request.GET.q }}">{% blocktrans with query=request.GET.q %}matching "{{ query }}"{% endblocktrans %}</a>
+     {% endif %}
      &rsaquo;
      <a href="../../?models={{ original.content_type }}">
          {{ original.verbose_name }}
-    </a>
-     {% else %}
-     {{ module_name|capfirst }}
+     </a>
+     {% if request.GET.q %}
      &rsaquo;
-     {{ original.verbose_name }}
-     {% endif %}
+     <a href="../../?models={{ original.content_type }}&q={{ request.GET.q }}">
+         {% blocktrans with name=original.verbose_name query=request.GET.q %}matching "{{ query }}"{% endblocktrans %}
+    </a>
+    {% endif %}
      &rsaquo;
      {% trans "View stored data" %}
 </div>
