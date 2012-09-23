@@ -36,12 +36,6 @@
 
             <h3>{% trans "Only models" %}</h3>
             {{ form.models }}
-
-            {% for key, val in params.items %}
-                {% if key != search_var and key != page_var  and key not in form.models.initial %}
-                <input type="hidden" name="{{ key }}" value="{{ val }}">
-                {% endif %}
-            {% endfor %}
             </form>
             <div style="padding-left: 10px;">{% if request.GET.models %}<span class="small quiet"><a href="{{ request.path_info }}">clear filters</a></span>{% endif %}</div>
             </div>

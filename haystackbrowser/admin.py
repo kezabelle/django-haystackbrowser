@@ -168,7 +168,6 @@ class HaystackResultsAdmin(object):
             'app_label': self.model._meta.app_label,
             'filtered': True,
             'form': form,
-            'params': request.GET.items(),
             'query_string': self.get_current_query_string(request, remove=['p']),
             'search_var': self.get_search_var(request),
             'page_var': page_var,
