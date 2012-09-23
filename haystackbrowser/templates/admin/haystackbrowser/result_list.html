@@ -11,7 +11,15 @@
          {{ app_label|capfirst }}
       </a>
       &rsaquo;
-      {{ module_name|capfirst }}
+     {% if request.GET.q %}
+     <a href="{{ request.path_info }}">{{ module_name|capfirst }}</a>
+     {% else %}
+     {{ module_name|capfirst }}
+     {% endif %}
+     {% if request.GET.q %}
+     &rsaquo;
+     {% blocktrans with query=request.GET.q %}matching "{{ query }}"{% endblocktrans %}
+     {% endif %}
     </div>
   {% endblock %}
 {% endif %}
