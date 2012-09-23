@@ -23,6 +23,7 @@ except ImportError:
 
 
 def get_query_string(query_params, new_params=None, remove=None):
+    # TODO: make this bettererer. Use propery dicty stuff on the Querydict?
     if new_params is None:
         new_params = {}
     if remove is None:
@@ -111,8 +112,8 @@ class HaystackResultsAdmin(object):
         klass = self.get_searchresult_wrapper()
         return [klass(x, self.admin_site.name) for x in object_list]
 
-    def get_current_query_string(self, request):
-        return get_query_string(request.GET, remove=['p'])
+    def get_current_query_string(self, request, add=None, remove=None):
+        return get_query_string(request.GET, new_params=add, remove=None)
 
     def get_settings(self):
         filtered_settings = {}
@@ -168,7 +169,7 @@ class HaystackResultsAdmin(object):
             'filtered': True,
             'form': form,
             'params': request.GET.items(),
-            'query_string': self.get_current_query_string(request),
+            'query_string': self.get_current_query_string(request, remove=['p']),
             'search_var': self.get_search_var(request),
             'page_var': page_var,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
