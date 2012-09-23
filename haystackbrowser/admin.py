@@ -141,9 +141,11 @@ class HaystackResultsAdmin(object):
         # Note that I'm only doing this to sidestep this issue:
         # https://gist.github.com/3766607
         if 'models' not in request.GET.keys():
+            # TODO: make this betterererer.
             find_all_models = ['&models=%s' % x[0] for x in available_models]
             find_all_models = ''.join(find_all_models)
-            return HttpResponseRedirect('%s?%s' % (request.path_info, find_all_models))
+            qs = self.get_current_query_string(request, remove=['p'])
+            return HttpResponseRedirect(request.path_info + qs + find_all_models)
 
         try:
             sqs = form.search()
