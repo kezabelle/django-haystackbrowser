@@ -113,7 +113,7 @@ class HaystackResultsAdmin(object):
         return [klass(x, self.admin_site.name) for x in object_list]
 
     def get_current_query_string(self, request, add=None, remove=None):
-        return get_query_string(request.GET, new_params=add, remove=None)
+        return get_query_string(request.GET, new_params=add, remove=remove)
 
     def get_settings(self):
         filtered_settings = {}
