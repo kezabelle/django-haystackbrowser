@@ -52,15 +52,12 @@
         {% endif %}
     {% endblock %}
 <div id="content-main">
+    <form>
     <fieldset class="module aligned">
         <h2>{% trans "Stored fields" %}</h2>
         <div class="description">
-            <p>
-            Data returned from the <a href="http://django-haystack.readthedocs.org/en/latest/searchresult_api.html#get-stored-fields">Search Result's stored_fields</a>.
-            </p>
-            <p>
+            Data returned from the <a href="http://django-haystack.readthedocs.org/en/latest/searchresult_api.html#get-stored-fields">Search Result's stored_fields</a>.<br>
             <a href="http://django-haystack.readthedocs.org/en/latest/searchfield_api.html#stored">See here</a> for an explanation of what 'Stored' means
-            </p>
         </div>
         {% for key, value in original.get_stored_fields.items %}
         <div class="form-row field-{{ key }}">
@@ -79,9 +76,7 @@
     <fieldset class="module aligned">
         <h2>{% trans "Additional fields" %}</h2>
         <div class="description">
-            <p>
             Data returned from the <a href="http://django-haystack.readthedocs.org/en/latest/searchresult_api.html#get-additional-fields">Search Result's additional_fields</a>.
-            </p>
         </div>
         {% for key, value in original.get_additional_fields.items %}
         <div class="form-row">
@@ -97,9 +92,7 @@
     <fieldset class="module aligned">
         <h2>{% trans "Haystack settings" %}</h2>
         <div class="description">
-            <p>
             {% trans "All relevant settings found in the Django settings module." %}
-            </p>
         </div>
         {% for key, value in haystack_settings.items %}
         <div class="form-row">
@@ -112,5 +105,6 @@
         </div>
         {% endfor %}
     </fieldset>
+    </form>
 </div>
 {% endblock %}
