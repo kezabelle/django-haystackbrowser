@@ -135,4 +135,8 @@ Bug reports and feature requests can be filed on the repository's `issue tracker
 
 If something can be discussed in 140 character chunks, there's also `my Twitter account`_.
 
+TODO
+----
 
+ * Fix the pagination to behave more like `Django`_'s in-built one, which relies
+   on a ``ChangeList`` (or at least, a facsimile of one)
