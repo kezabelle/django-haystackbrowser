@@ -1,6 +1,16 @@
 .. django-haystackbrowser documentation master file, created by
    sphinx-quickstart on Sun Sep 23 17:15:39 2012.
 
+.. _Django: https://www.djangoproject.com/
+.. _Haystack: http://www.haystacksearch.org/
+.. _Django administration: https://docs.djangoproject.com/en/dev/ref/contrib/admin/
+.. _GitHub: https://github.com/
+.. _git: http://git-scm.com/
+.. _PyPI: http://pypi.python.org/pypi
+.. _kezabelle/django-haystackbrowser: https://github.com/kezabelle/django-haystackbrowser/
+.. _issue tracker: https://github.com/kezabelle/django-haystackbrowser/issues/
+.. _my Twitter account: https://twitter.com/kezabelle/
+
 django-haystackbrowser
 ======================
 
@@ -10,17 +20,17 @@ django-haystackbrowser
 In brief
 --------
 
-A reusable Django application for viewing all the data that Haystack knows
-about.
+A reusable `Django`_ application for viewing and debugging all the data that
+has been pushed into `Haystack`_.
 
 Why I wrote it
 --------------
 
 I'm terrible at Haystack, and while I'm not allergic to the REPL, it's not a
-convinient way to keep track of data I've managed to massage into the Haystack
-backend.
+convinient way to keep track of data I've managed to massage into the
+`Haystack`_ backend.
 
-This application, a minor hack of the Django administration, aims to solve that
+This application, a minor hack of the `Django administration`_, aims to solve that
 by making search results browseable, in a developer-friendly way, rather than a
 client friendly way.
 
@@ -38,8 +48,8 @@ List view
 The default landing page, the list view, shows the following fields:
 
   * model verbose name;
-  * the Django app name, with a link to that admin page, if it's mounted.
-  * the Django model name, linking to the admin changelist for that model, if
+  * the `Django`_ app name, with a link to that admin page, if it's mounted.
+  * the `Django`_ model name, linking to the admin changelist for that model, if
     it's mounted.
   * the database primary key for that object, linking to the admin change view for
     that specific object, if the app and model are mounted.
@@ -47,7 +57,7 @@ The default landing page, the list view, shows the following fields:
   * The first few words of that primary content field.
 
 It also allows you to perform searches against the index, optionally limiting
-to specific models. That's functionality Haystack provides out of the box, so
+to specific models. That's functionality `Haystack`_ provides out of the box, so
 should be familiar.
 
 Stored data view
@@ -60,7 +70,7 @@ up the stored data view, which is the most useful part of it.
   * Highlights which of the stored fields is the primary content field
     (usually, ``text``)
   * Shows all additional fields.
-  * Shows any Haystack specific settings in the settings module.
+  * Shows any `Haystack`_ specific settings in the settings module.
 
 The stored data view, like the list view, provides links to the relevant admin
 pages for the app/model/instance if appropriate.
@@ -70,22 +80,42 @@ pages for the app/model/instance if appropriate.
 Installation
 ------------
 
-The only method of installation currently is via git, as I've no intention of
-polluting PyPI unless the app is provably not complete rubbish.
+The only method of installation currently is via `git`_, as I've no intention of
+polluting `PyPI`_ unless the app is provably not complete rubbish.
 
 .. todo: Add install example via pip, and git.
 
 Once it's on your Python path, add it to your settings module::
 
-    INSTALLED_APPS = (
+    INSTALLED_APPS += (
+        'haystackbrowser',
+    )
+
+Requirements
+^^^^^^^^^^^^
+
+The requirements are pretty specific, at this point. If the planets have
+aligned, things might not blow up!
+
+Specifically, it depends on **Django 1.3.1** or higher, and **Haystack 1.2.0** or
+higher.
+
+.. note::
+    `Django`_ 1.3.0 *will not work*, because of `this ticket`_, which snuck into
+    the 1.3.1 security release. But you should be up to date with the security
+    releases anyway :o)
+
+.. _this ticket: https://code.djangoproject.com/ticket/15721
+
+It's assumed that both `Haystack`_ and the `Django administration`_ are already in your
+``INSTALLED_APPS``, but if they're not, they need to be, so go ahead and add
+them::
+
+    INSTALLED_APPS += (
         'django.contrib.admin',
         'haystack',
         'haystackbrowser',
     )
-
-It's assumed that both Haystack and the Django admin are already in your
-``INSTALLED_APPS``, but if they're not, they need to be, so go ahead and add
-them.
 
 With that done, the only thing that's left to do is sign in as a superuser, and
 verify the new *Search results* app works.
@@ -105,8 +135,4 @@ Bug reports and feature requests can be filed on the repository's `issue tracker
 
 If something can be discussed in 140 character chunks, there's also `my Twitter account`_.
 
-.. _GitHub: https://github.com/
-.. _kezabelle/django-haystackbrowser: https://github.com/kezabelle/django-haystackbrowser/
-.. _issue tracker: https://github.com/kezabelle/django-haystackbrowser/issues/
-.. _my Twitter account: https://twitter.com/kezabelle/
 
