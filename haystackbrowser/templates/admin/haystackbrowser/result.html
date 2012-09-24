@@ -21,7 +21,7 @@
     {% endif %}
 </td>
 {% if filtered %}<td>{{ result.score }}</td>{% endif %}
-<td>{{ result.searchindex.get_content_field }}</td>
+<td>{{ result.get_content_field }}</td>
 <td>{{ result.get_content|striptags|safe|truncatewords:20 }}</td>
 <td><a href="{{ result.content_type }}/{{ result.pk }}/{% if request.GET.q %}?q={{ request.GET.q }}{% endif %}">View stored data</a></td>
 

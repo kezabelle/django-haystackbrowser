@@ -63,7 +63,7 @@
         <div class="form-row field-{{ key }}">
             <label for="{{ key }}">{{ key }}</label>
             <p id="{{ key }}">{{ value }}</p>
-            {% if key == original.searchindex.get_content_field %}
+            {% if key == original.get_content_field %}
             <p class="help">{% trans "this field supplies the primary document to be indexed" %}</p>
             {% endif %}
         </div>
