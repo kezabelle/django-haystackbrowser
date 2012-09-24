@@ -10,6 +10,7 @@
 .. _kezabelle/django-haystackbrowser: https://github.com/kezabelle/django-haystackbrowser/
 .. _issue tracker: https://github.com/kezabelle/django-haystackbrowser/issues/
 .. _my Twitter account: https://twitter.com/kezabelle/
+.. _FreeBSD: http://en.wikipedia.org/wiki/BSD_licenses#2-clause_license_.28.22Simplified_BSD_License.22_or_.22FreeBSD_License.22.29
 
 django-haystackbrowser
 ======================
@@ -17,7 +18,7 @@ django-haystackbrowser
 :author: Keryn Knight
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
 In brief
 --------
@@ -145,3 +146,9 @@ TODO
 
  * Fix the pagination to behave more like `Django`_'s in-built one, which relies
    on a ``ChangeList`` (or at least, a facsimile of one)
+
+The license
+-----------
+
+It's `FreeBSD`_. There's a ``LICENSE`` file in the root of the repository, and
+any downloads.
