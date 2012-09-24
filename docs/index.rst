@@ -14,6 +14,8 @@
 django-haystackbrowser
 ======================
 
+:author: Keryn Knight
+
 .. toctree::
    :maxdepth: 2
 
@@ -48,12 +50,14 @@ List view
 The default landing page, the list view, shows the following fields:
 
   * model verbose name;
-  * the `Django`_ app name, with a link to that admin page, if it's mounted.
+  * the `Django`_ app name, with a link to that admin page, if any model
+    belonging to it has been registered via ``admin.site.register``;
   * the `Django`_ model name, linking to the admin changelist for that model, if
-    it's mounted.
+    it has been registered via ``admin.site.register``;
   * the database primary key for that object, linking to the admin change view for
-    that specific object, if the app and model are mounted.
-  * The primary content field for each result.
+    that specific object, if the app and model are both registered via
+    ``admin.site.register``;
+  * The primary content field for each result;
   * The first few words of that primary content field.
 
 It also allows you to perform searches against the index, optionally limiting
@@ -66,10 +70,10 @@ Stored data view
 From the list view, clicking on ``View stored data`` for any result will bring
 up the stored data view, which is the most useful part of it.
 
-  * Shows all ``stored`` fields defined in the SearchIndex, and their values.
+  * Shows all ``stored`` fields defined in the SearchIndex, and their values;
   * Highlights which of the stored fields is the primary content field
-    (usually, ``text``)
-  * Shows all additional fields.
+    (usually, ``text``);
+  * Shows all additional fields;
   * Shows any `Haystack`_ specific settings in the settings module.
 
 The stored data view, like the list view, provides links to the relevant admin
@@ -101,7 +105,7 @@ Specifically, it depends on **Django 1.3.1** or higher, and **Haystack 1.2.0** o
 higher.
 
 .. note::
-    `Django`_ 1.3.0 *will not work*, because of `this ticket`_, which snuck into
+    Django 1.3.0 *will not work*, because of `this ticket`_, which snuck into
     the 1.3.1 security release. But you should be up to date with the security
     releases anyway :o)
 
@@ -118,7 +122,8 @@ them::
     )
 
 With that done, the only thing that's left to do is sign in as a superuser, and
-verify the new *Search results* app works.
+verify the new *Search results* app works. It probably won't, in which case
+you'd be doing me a favour if you filed a ticket on the `issue tracker`_!
 
 .. _contributing:
 
