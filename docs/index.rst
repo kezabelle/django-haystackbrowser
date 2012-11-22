@@ -11,6 +11,7 @@
 .. _issue tracker: https://github.com/kezabelle/django-haystackbrowser/issues/
 .. _my Twitter account: https://twitter.com/kezabelle/
 .. _FreeBSD: http://en.wikipedia.org/wiki/BSD_licenses#2-clause_license_.28.22Simplified_BSD_License.22_or_.22FreeBSD_License.22.29
+.. _Ben Hastings: https://twitter.com/benjhastings/
 
 django-haystackbrowser
 ======================
@@ -140,6 +141,13 @@ repository. The main branch is *master*, but all work is carried out on
 Bug reports and feature requests can be filed on the repository's `issue tracker`_.
 
 If something can be discussed in 140 character chunks, there's also `my Twitter account`_.
+
+Contributors
+------------
+
+The following people have been of help, in some capacity.
+
+ * `Ben Hastings`_
 
 TODO
 ----
