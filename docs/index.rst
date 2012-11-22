@@ -159,6 +159,14 @@ TODO
  * Write a template tag for finding data attached to a `Django`_ model
    instance.
 
+Known issues
+------------
+
+ * The links to the app admin may not actually work, because the app may not be
+   mounted onto the AdminSite, but passing pretty much anything to the
+   AdminSite app_list urlpattern will result in a valid URL. The other URLs
+   should only ever work if they're mounted, though.
+
 The license
 -----------
 
