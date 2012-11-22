@@ -166,7 +166,7 @@ class HaystackResultsAdmin(object):
             'result_count': paginator.count,
             'opts': self.model._meta,
             'title': self.model._meta.verbose_name_plural,
-            'root_path': self.admin_site.root_path,
+            'root_path': getattr(self.admin_site, 'root_path', None),
             'app_label': self.model._meta.app_label,
             'filtered': True,
             'form': form,
