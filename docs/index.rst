@@ -152,8 +152,12 @@ The following people have been of help, in some capacity.
 TODO
 ----
 
- * Fix the pagination to behave more like `Django`_'s in-built one, which relies
-   on a ``ChangeList`` (or at least, a facsimile of one)
+ * Possibly figure out how to turn the model filtering into a decent Faceted
+   search.
+ * Provide a custom `change_form` template, not enabled by default, that adds
+   data to show what has been stored in `Haystack`_.
+ * Write a template tag for finding data attached to a `Django`_ model
+   instance.
 
 The license
 -----------
