@@ -42,6 +42,22 @@ def get_query_string(query_params, new_params=None, remove=None):
     return '?%s' % params.urlencode()
 
 
+class FakeChangeListForPaginator(object):
+    def __init__(self, request, page, per_page, model_opts):
+        self.paginator = page.paginator
+        self.page_num = page.number - 1
+        self.can_show_all = False
+        self.show_all = False
+        self.result_count = self.paginator.count
+        self.multi_page = self.result_count > per_page
+        self.request = request
+        self.opts = model_opts
+
+
+    def get_query_string(self, a_dict):
+        return get_query_string(self.request.GET, a_dict)
+
+
 class HaystackResultsAdmin(object):
     fields = None
     fieldsets = None
@@ -149,10 +165,14 @@ class HaystackResultsAdmin(object):
 
         try:
             sqs = form.search()
-            page_no = int(request.GET.get(page_var, 1))
+            try:
+                page_no = int(request.GET.get(PAGE_VAR, 0))
+            except ValueError:
+                page_no = 0
+            #page_no = int(request.GET.get(page_var, 1))
             results_per_page = self.get_results_per_page(request)
             paginator = Paginator(sqs, results_per_page)
-            page = paginator.page(page_no)
+            page = paginator.page(page_no+1)
         except (InvalidPage, ValueError):
             # paginator.page may raise InvalidPage if we've gone too far
             # meanwhile, casting the querystring parameter may raise ValueError
@@ -174,6 +194,7 @@ class HaystackResultsAdmin(object):
             'search_var': self.get_search_var(request),
             'page_var': page_var,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
+            'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta)
         }
         return render_to_response('admin/haystackbrowser/result_list.html', context,
             context_instance=RequestContext(request))

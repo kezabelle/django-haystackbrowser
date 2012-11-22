@@ -1,5 +1,5 @@
 {% extends "admin/change_list.html" %}
-{% load i18n %}
+{% load i18n admin_list %}
 {% if not is_popup %}
   {% block breadcrumbs %}
     <div class="breadcrumbs">
@@ -69,21 +69,7 @@
         </div>
         {% endif %}
         {% endblock result_list %}
-
-        {% block pagination %}
-        <p class="paginator">
-        {% if pagination_required %}
-            {% for i in page_range %}
-            {% if i == page_num %}
-            <span class="this-page">{{ i }}</span>
-            {% else %}
-            <a href="{{ query_string }}&p={{ i }}" {% if forloop.last %}class="end"{% endif %}>{{ i }}</a>
-            {% endif %}
-            {% endfor %}
-        {% endif %}
-        {{ result_count }} {% ifequal result_count 1 %}{{ opts.verbose_name }}{% else %}{{ opts.verbose_name_plural }}{% endifequal %}
-        </p>
-        {% endblock pagination %}
+        {% block pagination %}{% pagination cl %}{% endblock %}
     </div>
 </div>
 {% endblock content %}
