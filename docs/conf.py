@@ -12,11 +12,28 @@
 # serve to show the default.
 
 import sys, os
-
+from django.core.management import setup_environ
+from django.conf import global_settings as django_conf
+django_conf.HAYSTACK_SITECONF = 'search_sites'
+django_conf.HAYSTACK_SEARCH_ENGINE = 'simple'
+setup_environ(django_conf)
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+haystack_search_sites = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__), 'required_modules',
+        )
+    )
+browserdocs = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__), '..',
+        )
+    )
+print(haystack_search_sites)
+print(browserdocs)
+sys.path.insert(0, browserdocs)
+sys.path.insert(0, haystack_search_sites)
 
 # -- General configuration -----------------------------------------------------
 
@@ -91,7 +108,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'haiku'
+#html_theme = 'haiku'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -243,4 +260,8 @@ texinfo_documents = [
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {
+        'python': ('http://docs.python.org/', None),
+        'django': ('http://django.readthedocs.org/en/latest/', None),
+}
+
