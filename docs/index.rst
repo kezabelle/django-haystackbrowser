@@ -19,7 +19,9 @@ django-haystackbrowser
 :author: Keryn Knight
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 10
+
+    api
 
 In brief
 --------
