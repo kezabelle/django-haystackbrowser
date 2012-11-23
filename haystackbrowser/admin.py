@@ -7,7 +7,7 @@ from django.utils.functional import update_wrapper
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import admin
-from django.contrib.admin.views.main import PAGE_VAR, ALL_VAR, SEARCH_VAR
+from django.contrib.admin.views.main import PAGE_VAR, SEARCH_VAR
 from django.conf import settings
 from django.core.management.commands.diffsettings import module_to_dict
 from haystack.query import SearchQuerySet
@@ -43,6 +43,7 @@ def get_query_string(query_params, new_params=None, remove=None):
 
 
 class FakeChangeListForPaginator(object):
+    """A value object to contain attributes required for Django's pagination template tag."""
     def __init__(self, request, page, per_page, model_opts):
         self.paginator = page.paginator
         self.page_num = page.number - 1
@@ -55,10 +56,20 @@ class FakeChangeListForPaginator(object):
 
 
     def get_query_string(self, a_dict):
+        """ Method to return a querystring appropriate for pagination."""
         return get_query_string(self.request.GET, a_dict)
 
 
 class HaystackResultsAdmin(object):
+    """Object which emulates enough of the standard Django ModelAdmin that it may
+    be mounted into an AdminSite instance and pass validation.
+    Used to work around the fact that we don't actually have a concrete Django Model.
+
+    :param model: the model being mounted for this object.
+    :type model: class
+    :param admin_site: the parent site instance.
+    :type admin_site: AdminSite object
+    """
     fields = None
     fieldsets = None
     exclude = None
@@ -81,15 +92,40 @@ class HaystackResultsAdmin(object):
         }
 
     def has_add_permission(self, request):
+        """Emulates the equivalent Django ModelAdmin method.
+        :param request: the current request.
+        :type request: WSGIRequest
+
+        :return: `False`
+        """
         return False
 
     def has_change_permission(self, request, obj=None):
+        """Emulates the equivalent Django ModelAdmin method.
+
+        :param request: the current request.
+        :param obj: the object is being viewed.
+        :type request: WSGIRequest
+        :type obj: None
+
+        :return: The value of `request.user.is_superuser`
+        """
         return request.user.is_superuser
 
     def has_delete_permission(self, request, obj=None):
+        """Emulates the equivalent Django ModelAdmin method.
+
+        :param request: the current request.
+        :param obj: the object is being viewed.
+        :type request: WSGIRequest
+        :type obj: None
+
+        :return: `False`
+        """
         return False
 
     def urls(self):
+        """Sets up the required urlconf for the admin views."""
         from django.conf.urls.defaults import patterns, url
         def wrap(view):
             def wrapper(*args, **kwargs):
@@ -110,28 +146,82 @@ class HaystackResultsAdmin(object):
     urls = property(urls)
 
     def get_results_per_page(self, request):
+        """Allows for overriding the number of results shown.
+        This differs from the usual way a ModelAdmin may declare pagination
+        via ``list_per_page`` and instead looks in Django's ``LazySettings`` object
+        for the item ``HAYSTACK_SEARCH_RESULTS_PER_PAGE``. If it's not found,
+        falls back to **20**.
+
+        :param request: the current request.
+        :type request: WSGIRequest
+
+        :return: The number of results to show, per page.
+        """
         return getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
     def get_paginator_var(self, request):
+        """Provides the name of the variable used in query strings to discover
+        what page is being requested. Uses the same ``PAGE_VAR`` as the standard
+        :py:class:`django.contrib.admin.views.main.ChangeList <django:django.contrib.admin.views.ChangeList>`
+
+        :param request: the current request.
+        :type request: WSGIRequest
+
+        :return: the name of the variable used in query strings for pagination.
+        """
         return PAGE_VAR
 
     def get_search_var(self, request):
+        """Provides the name of the variable used in query strings to discover
+        what text search has been requested. Uses the same ``SEARCH_VAR`` as the standard
+        :py:class:`django.contrib.admin.views.main.ChangeList <django:django.contrib.admin.views.ChangeList>`
+
+        :param request: the current request.
+        :type request: WSGIRequest
+
+        :return: the name of the variable used in query strings for text searching.
+        """
         return SEARCH_VAR
 
-    def get_all_results_var(self, request):
-        return ALL_VAR
-
     def get_searchresult_wrapper(self):
+        """This method serves as a hook for potentially overriding which class
+        is used for wrapping each result into a value object for display.
+
+        :return: class for wrapping search results. Defaults to :py:class:`~haystackbrowser.models.SearchResultWrapper`
+        """
         return SearchResultWrapper
 
     def get_wrapped_search_results(self, object_list):
+        """Wraps each :py:class:`~haystack.models.SearchResult` from the
+        :py:class:`~haystack.query.SearchQuerySet` in our own value object, whose
+        responsibility is providing additional attributes required for display.
+
+        :param object_list: :py:class:`~haystack.models.SearchResult` objects.
+
+        :return: list of items wrapped with whatever :py:meth:`~haystackbrowser.admin.HaystackResultsAdmin.get_searchresult_wrapper` provides.
+        """
         klass = self.get_searchresult_wrapper()
         return [klass(x, self.admin_site.name) for x in object_list]
 
     def get_current_query_string(self, request, add=None, remove=None):
+        """ Method to return a querystring with modified parameters.
+
+        :param request: the current request.
+        :type request: WSGIRequest
+        :param add: items to be added.
+        :type add: dictionary
+        :param remove: items to be removed.
+        :type remove: dictionary
+
+        :return: the new querystring.
+        """
         return get_query_string(request.GET, new_params=add, remove=remove)
 
     def get_settings(self):
+        """Find all Django settings prefixed with ``HAYSTACK_``
+
+        :return: dictionary whose keys are setting names (tidied up).
+        """
         filtered_settings = {}
         searching_for = u'HAYSTACK_'
         all_settings = module_to_dict(settings._wrapped)
@@ -143,6 +233,14 @@ class HaystackResultsAdmin(object):
         return filtered_settings
 
     def index(self, request):
+        """The view for showing all the results in the Haystack index. Emulates
+        the standard Django ChangeList mostly.
+
+        :param request: the current request.
+        :type request: WSGIRequest
+
+        :return: A template rendered into an HttpReponse
+        """
         page_var = self.get_paginator_var(request)
         form = PreSelectedModelSearchForm(request.GET or None, load_all=False)
 
@@ -200,6 +298,17 @@ class HaystackResultsAdmin(object):
             context_instance=RequestContext(request))
 
     def view(self, request, content_type, pk):
+        """The view for showing the results of a single item in the Haystack index.
+
+        :param request: the current request.
+        :type request: WSGIRequest
+        :param content_type: ``app_label`` and ``model_name`` as stored in Haystack, separated by "."
+        :type content_type: string.
+        :param pk: the object identifier stored in Haystack
+        :type pk: string.
+
+        :return: A template rendered into an HttpReponse
+        """
         query = {DJANGO_ID: pk, DJANGO_CT: content_type}
         try:
             sqs = self.get_wrapped_search_results(SearchQuerySet().filter(**query)[:1])[0]
