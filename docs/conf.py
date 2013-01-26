@@ -30,8 +30,6 @@ browserdocs = os.path.abspath(
             os.path.dirname(__file__), '..',
         )
     )
-print(haystack_search_sites)
-print(browserdocs)
 sys.path.insert(0, browserdocs)
 sys.path.insert(0, haystack_search_sites)
 
@@ -263,5 +261,6 @@ texinfo_documents = [
 intersphinx_mapping = {
         'python': ('http://docs.python.org/', None),
         'django': ('http://django.readthedocs.org/en/latest/', None),
+        'haystack': ('http://django-haystack.readthedocs.org/en/latest/', None),
 }
 
