@@ -9,11 +9,11 @@ from django.template import RequestContext
 from django.contrib import admin
 from django.contrib.admin.views.main import PAGE_VAR, SEARCH_VAR
 from django.conf import settings
-from django.core.management.commands.diffsettings import module_to_dict
 from haystack.query import SearchQuerySet
 from haystack.forms import model_choices
 from haystackbrowser.models import HaystackResults, SearchResultWrapper
 from haystackbrowser.forms import PreSelectedModelSearchForm
+from haystackbrowser.utils import get_haystack_settings
 
 try:
     from haystack.constants import DJANGO_CT, DJANGO_ID
@@ -222,15 +222,7 @@ class HaystackResultsAdmin(object):
 
         :return: dictionary whose keys are setting names (tidied up).
         """
-        filtered_settings = {}
-        searching_for = u'HAYSTACK_'
-        all_settings = module_to_dict(settings._wrapped)
-        for setting_name, setting_value in all_settings.items():
-
-            if setting_name.startswith(searching_for):
-                setting_name = setting_name.replace(searching_for, '').replace('_', ' ')
-                filtered_settings[setting_name] = setting_value
-        return filtered_settings
+        return get_haystack_settings()
 
     def index(self, request):
         """The view for showing all the results in the Haystack index. Emulates
