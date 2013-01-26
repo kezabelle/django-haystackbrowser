@@ -22,6 +22,7 @@ django-haystackbrowser
     :maxdepth: 10
 
     api
+    changelog
 
 In brief
 --------
@@ -91,7 +92,14 @@ Installation
 The only method of installation currently is via `git`_, as I've no intention of
 polluting `PyPI`_ unless the app is provably not complete rubbish.
 
-.. todo: Add install example via pip, and git.
+To get the latest version::
+
+    git clone git@github.com:kezabelle/django-haystackbrowser.git
+
+and then make sure the ``haystackbrowser`` package is on your python path.
+
+.. note::
+    At some point, I'll put together a setup file, and then it'll be possible to install via ``pip``.
 
 Once it's on your Python path, add it to your settings module::
 
@@ -105,15 +113,8 @@ Requirements
 The requirements are pretty specific, at this point. If the planets have
 aligned, things might not blow up!
 
-Specifically, it depends on **Django 1.3.1** or higher, and **Haystack 1.2.0** or
+Specifically, it depends on **Django 1.2.0** or higher, and **Haystack 1.2.0** or
 higher.
-
-.. note::
-    Django 1.3.0 *will not work*, because of `this ticket`_, which snuck into
-    the 1.3.1 security release. But you should be up to date with the security
-    releases anyway :o)
-
-.. _this ticket: https://code.djangoproject.com/ticket/15721
 
 It's assumed that both `Haystack`_ and the `Django administration`_ are already in your
 ``INSTALLED_APPS``, but if they're not, they need to be, so go ahead and add
@@ -125,9 +126,44 @@ them::
         'haystackbrowser',
     )
 
-With that done, the only thing that's left to do is sign in as a superuser, and
-verify the new *Search results* app works. It probably won't, in which case
-you'd be doing me a favour if you filed a ticket on the `issue tracker`_!
+
+
+.. _usage:
+
+Usage
+-----
+
+With the `installation`_ done and the `requirements`_ met, the only thing that's
+left to do is sign in as a superuser, and verify the new *Search results* app
+works. It probably won't, in which case you'd be doing me a favour if you filed
+a ticket on the `issue tracker`_!
+
+Assuming it does work, you can augment your existing ModelAdmins by using
+(or copy-pasting from) the templates available:
+
+* ``admin/haystackbrowser/change_form_with_link.html`` adds a link
+  (alongside the *history* and *view on site* links) to the corresponding
+  stored data view for the current object.
+* ``admin/haystackbrowser/change_form_with_data.html`` displays all
+  the stored data for the current object, on the same screen, beneath the standard
+  ``ModelAdmin`` submit row.
+
+Both templates play nicely with the standard admin pages, and both ensure
+they call their ``{% block %}``'s super context.
+
+Their simplest usage would be::
+
+    class MyModelAdmin(admin.ModelAdmin):
+        change_form_template = 'admin/haystackbrowser/change_form_with_data.html'
+
+Though if you've already changed your template, either via the attribute or
+via admin template discovery, you can easily take the minor changes from these listed
+templates and adapt them for your own needs.
+
+.. note::
+    Both the provided templates check that the given context has ``change=True``
+    and access to the ``original`` object being edited, so nothing will appear on
+    the add screens.
 
 .. _contributing:
 
@@ -156,10 +192,6 @@ TODO
 
  * Possibly figure out how to turn the model filtering into a decent Faceted
    search.
- * Provide a custom `change_form` template, not enabled by default, that adds
-   data to show what has been stored in `Haystack`_.
- * Write a template tag for finding data attached to a `Django`_ model
-   instance.
 
 Known issues
 ------------
