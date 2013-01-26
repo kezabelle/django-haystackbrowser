@@ -1,4 +1,4 @@
-from django.utils.safestring import mark_safe
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.core.urlresolvers import NoReverseMatch, reverse
 from django.utils.translation import ugettext_lazy as _
@@ -25,7 +25,7 @@ class SearchResultWrapper(object):
     :type obj: object
     :param admin_site: the parent site instance.
     :type admin_site: AdminSite object
-    
+
     """
     def __init__(self, obj, admin_site=None):
         self.admin = admin_site
