@@ -6,4 +6,5 @@
     {% if change and original %}
     {% haystackbrowser_for_object original %}
     {% endif %}
+    {{ block.super }}
 {% endblock %}
