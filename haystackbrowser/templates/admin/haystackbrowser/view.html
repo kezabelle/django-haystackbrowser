@@ -16,7 +16,7 @@
      </a>
      {% if request.GET.q %}
      &rsaquo;
-     <a href="../../?q={{ request.GET.q }}">{% blocktrans with query=request.GET.q %}matching "{{ query }}"{% endblocktrans %}</a>
+     <a href="../../?q={{ request.GET.q }}">{% blocktrans with request.GET.q as query %}matching "{{ query }}"{% endblocktrans %}</a>
      {% endif %}
      &rsaquo;
      <a href="../../?models={{ original.content_type }}">
@@ -25,7 +25,7 @@
      {% if request.GET.q %}
      &rsaquo;
      <a href="../../?models={{ original.content_type }}&q={{ request.GET.q }}">
-         {% blocktrans with name=original.verbose_name query=request.GET.q %}matching "{{ query }}"{% endblocktrans %}
+         {% blocktrans with original.verbose_name as name and request.GET.q as query %}matching "{{ query }}"{% endblocktrans %}
     </a>
     {% endif %}
      &rsaquo;
@@ -40,13 +40,13 @@
         {% if original %}
         <ul class="object-tools">
             {% if original.get_app_url %}
-            <li><a href="{{ original.get_app_url }}">{% blocktrans with app=original.app_label %}{{ app }} admin index{% endblocktrans %}</a></li>
+            <li><a href="{{ original.get_app_url }}">{% blocktrans with original.app_label as app %}{{ app }} admin index{% endblocktrans %}</a></li>
             {% endif %}
             {% if original.get_model_url %}
-            <li><a href="{{ original.get_model_url }}">{% blocktrans with model=original.verbose_name %}{{ model }} admin{% endblocktrans %}</a></li>
+            <li><a href="{{ original.get_model_url }}">{% blocktrans with original.verbose_name as model %}{{ model }} admin{% endblocktrans %}</a></li>
             {% endif %}
             {% if original.get_pk_url %}
-            <li><a href="{{ original.get_pk_url }}">{% blocktrans with model=original.verbose_name %}edit this {{ model }}{% endblocktrans %}</a></li>
+            <li><a href="{{ original.get_pk_url }}">{% blocktrans with original.verbose_name as model %}edit this {{ model }}{% endblocktrans %}</a></li>
             {% endif %}
         </ul>
         {% endif %}
