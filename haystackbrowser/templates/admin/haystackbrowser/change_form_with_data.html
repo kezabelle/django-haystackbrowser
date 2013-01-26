@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+{% load haystackbrowser_data %}
+
+{% block sidebar %}
+    {% if change and original %}
+    {% haystackbrowser_for_object original %}
+    {% endif %}
+{% endblock %}

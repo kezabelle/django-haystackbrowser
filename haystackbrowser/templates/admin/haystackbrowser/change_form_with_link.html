@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+    {% if change and original %}
+        <li><a href="../../../haystackbrowser/haystackresults/{{ opts.app_label }}.{{ opts.module_name }}/{{ original.pk }}/" class="historylink">{% trans "View stored data" %}</a></li>
+    {% endif %}
+    {{ block.super }}
+{% endblock %}
