@@ -1,0 +1,5 @@
+include LICENSE
+include README.rst
+global-include *.rst *.py *.html
+global-exclude *.pyc *.pyo *.sw? *.sh
+prune docs/_build
