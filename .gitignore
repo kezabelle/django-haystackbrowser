@@ -1,4 +1,6 @@
 *.pyc
 docs/_build
 haystackbrowser/panels.py
+dist
+django_haystackbrowser.egg-info
 *.pickle
