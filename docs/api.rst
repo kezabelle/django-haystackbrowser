@@ -1,8 +1,8 @@
 API documentation
 =================
 
-:mod:`admin`
-------------
+:mod:`admin` classes
+--------------------
 
 .. automodule:: haystackbrowser.admin
     :members:
@@ -15,10 +15,23 @@ API documentation
     :members:
     :show-inheritance:
 
-:mod:`models`
--------------
+:mod:`models` available
+-----------------------
 
 .. automodule:: haystackbrowser.models
     :members:
     :show-inheritance:
 
+:mod:`utils` helpers
+--------------------
+
+.. automodule:: haystackbrowser.utils
+    :members:
+    :show-inheritance:
+
+Template tags
+-------------
+
+.. automodule:: haystackbrowser.templatetags.haystackbrowser_data
+    :members:
+    :show-inheritance:

@@ -3,7 +3,9 @@ from django.conf import settings
 from django.core.management.commands.diffsettings import module_to_dict
 
 def get_haystack_settings():
-    """Find all settings which are prefixed with HAYSTACK_"""
+    """
+    Find all settings which are prefixed with `HAYSTACK_`
+    """
     filtered_settings = {}
     searching_for = u'HAYSTACK_'
     all_settings = module_to_dict(settings._wrapped)

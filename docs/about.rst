@@ -1,5 +1,3 @@
-.. django-haystackbrowser documentation master file, created by
-   sphinx-quickstart on Sun Sep 23 17:15:39 2012.
 
 .. _Django: https://www.djangoproject.com/
 .. _Haystack: http://www.haystacksearch.org/
@@ -13,6 +11,8 @@
 .. _FreeBSD: http://en.wikipedia.org/wiki/BSD_licenses#2-clause_license_.28.22Simplified_BSD_License.22_or_.22FreeBSD_License.22.29
 .. _Ben Hastings: https://twitter.com/benjhastings/
 
+.. title:: About
+
 django-haystackbrowser
 ======================
 
@@ -23,6 +23,7 @@ In brief
 
 A reusable `Django`_ application for viewing and debugging all the data that
 has been pushed into `Haystack`_.
+
 
 Why I wrote it
 --------------
