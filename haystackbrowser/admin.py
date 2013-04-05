@@ -14,6 +14,7 @@ from haystack.forms import model_choices
 from haystackbrowser.models import HaystackResults, SearchResultWrapper
 from haystackbrowser.forms import PreSelectedModelSearchForm
 from haystackbrowser.utils import get_haystack_settings
+from django.forms import Media
 
 try:
     from haystack.constants import DJANGO_CT, DJANGO_ID
@@ -284,7 +285,8 @@ class HaystackResultsAdmin(object):
             'search_var': self.get_search_var(request),
             'page_var': page_var,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
-            'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta)
+            'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta),
+            'media': Media()
         }
         return render_to_response('admin/haystackbrowser/result_list.html', context,
             context_instance=RequestContext(request))

@@ -42,4 +42,7 @@ setup(
     install_requires=REQUIREMENTS,
     classifiers=TROVE_CLASSIFIERS,
     platforms=['OS Independent'],
+    package_data={'': [
+        'templates/admin/haystackbrowser/*.html',
+    ]},
 )
