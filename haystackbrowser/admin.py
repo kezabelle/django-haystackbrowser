@@ -273,6 +273,7 @@ class HaystackResultsAdmin(object):
             'results': self.get_wrapped_search_results(page.object_list),
             'pagination_required': page.has_other_pages(),
             'page_range': paginator.page_range,
+            'facets': sqs.facet_counts(),
             'page_num': page.number,
             'result_count': paginator.count,
             'opts': self.model._meta,

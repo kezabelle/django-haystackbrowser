@@ -42,6 +42,10 @@
             </div>
             <script type="text/javascript">document.getElementById("{{ form.q.id_for_label }}").focus();</script>
 
+            <h3>{% trans "Facets" %}</h3>
+            {{ facets }}
+            {{ form.selected_facets }}
+
             <h3>{% trans "Only models" %}</h3>
             {{ form.models }}
             </form>

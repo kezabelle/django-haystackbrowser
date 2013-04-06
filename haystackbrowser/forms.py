@@ -1,6 +1,7 @@
-from haystack.forms import ModelSearchForm
+from haystack.forms import ModelSearchForm, FacetedModelSearchForm
 
-class PreSelectedModelSearchForm(ModelSearchForm):
+
+class PreSelectedModelSearchForm(FacetedModelSearchForm):
     """ Minor modification to the standard ModelSearchForm. Only changes ``no_query_found``."""
     def no_query_found(self):
         """When nothing is entered, show everything, because it's a better
