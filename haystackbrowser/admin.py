@@ -286,6 +286,10 @@ class HaystackResultsAdmin(object):
             'page_var': page_var,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
             'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta),
+            # Note: the empty Media object isn't specficially required for the
+            # standard Django admin, but is apparently a pre-requisite for
+            # things like Grappelli.
+            # See #1 (https://github.com/kezabelle/django-haystackbrowser/pull/1)
             'media': Media()
         }
         return render_to_response('admin/haystackbrowser/result_list.html', context,
