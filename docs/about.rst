@@ -12,6 +12,7 @@
 .. _my Twitter account: https://twitter.com/kezabelle/
 .. _FreeBSD: http://en.wikipedia.org/wiki/BSD_licenses#2-clause_license_.28.22Simplified_BSD_License.22_or_.22FreeBSD_License.22.29
 .. _Ben Hastings: https://twitter.com/benjhastings/
+.. _David Novakovic: http://blog.dpn.name/
 .. _REPL to inspect the SearchQuerySet: http://django-haystack.readthedocs.org/en/latest/debugging.html#no-results-found-on-the-web-page
 
 .. title:: About
@@ -202,6 +203,8 @@ The following people have been of help, in some capacity.
 
  * `Ben Hastings`_, for testing it under **Django 1.4** and subsequently forcing
    me to stop it blowing up uncontrollably.
+ * `David Novakovic`_, for getting it to at least work under **Grappelli**, and
+   fixing an omission in the setup script.
 
 TODO
 ----

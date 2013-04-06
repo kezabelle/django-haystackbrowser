@@ -5,6 +5,15 @@ A list of changes which affect the API and related code follows. Documentation
 and other miscellaneous changes are not listed. See the git history for a
 complete history.
 
+April 2013
+^^^^^^^^^^
+
+  * |bugfix| Lack of media prevents the page from working under Grappelli.
+    Thanks to `David Novakovic`_ (`dpnova`_ on `GitHub`_) for the fix.
+  * |bugfix| Templates weren't getting included when using the setup.py,
+    probably because I've always been using `setup.py develop`.
+    Thanks to `David Novakovic`_ (`dpnova`_ on `GitHub`_) for the fix.
+
 January 2013
 ^^^^^^^^^^^^
 
@@ -45,3 +54,6 @@ September 2012
 .. |bugfix| replace:: **Bug fix:**
 .. |feature| replace:: **New/changed:**
 .. _this ticket: https://code.djangoproject.com/ticket/15721
+.. _David Novakovic: http://blog.dpn.name/
+.. _dpnova: https://github.com/dpnova/
+.. _GitHub: https://github.com/
