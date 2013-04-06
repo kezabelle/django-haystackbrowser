@@ -98,6 +98,16 @@ class SearchResultWrapper(object):
         """
         return getattr(self.object, self.get_content_field())
 
+    def get_field_count(self):
+        """
+        Provides mechanism for finding the number of fields stored on this
+        Search Result.
+
+        :return: the count of all stored fields.
+        :rtype: integer
+        """
+        return len(self.object.get_stored_fields().keys())
+
     def __getattr__(self, attr):
         return getattr(self.object, attr)
 
