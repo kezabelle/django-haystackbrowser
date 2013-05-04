@@ -45,7 +45,7 @@
             <h3>{% trans "Only models" %}</h3>
             {{ form.models }}
             </form>
-            <div style="padding-left: 10px;">{% if search_model_count != form.models.field.choices|length or request.GET.q %}<span class="small quiet"><a href="{{ request.path_info }}">clear filters</a></span>{% endif %}</div>
+            <div style="padding-left: 10px;">{% if search_model_count != form.models.field.choices|length or request.GET.q %}<span class="small quiet"><a href="{{ request.path_info }}">{% trans "clear all filters" %}</a></span>{% endif %}</div>
             </div>
         {% endblock filters %}
 
