@@ -1,3 +1,4 @@
+{% load i18n highlight %}
 <td>{{ result.verbose_name }}</td>
 <td>
     {% if result.get_app_url %}
@@ -22,6 +23,17 @@
 </td>
 {% if filtered %}<td>{{ result.score }}</td>{% endif %}
 <td>{{ result.get_content_field }}</td>
-<td>{{ result.get_content|striptags|safe|truncatewords:20 }}</td>
-<td><a href="{{ result.content_type }}/{{ result.pk }}/{% if request.GET.q %}?q={{ request.GET.q }}{% endif %}">View stored data</a></td>
+
+<td>
+    {% if request.GET.q %}
+        {% highlight result.get_content with request.GET.q html_tag "strong" max_length 500 %}
+    {% else %}
+        {{ result.get_content|striptags|safe|truncatewords:20 }}
+    {% endif %}
+    </td>
+<td>
+    <a href="{{ result.content_type }}/{{ result.pk }}/{% if request.GET.q %}?q={{ request.GET.q }}{% endif %}">
+        {% trans 'View stored data' %}
+    </a>
+</td>
 
