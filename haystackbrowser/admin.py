@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator, InvalidPage
 from django.utils.encoding import force_unicode
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, string_concat
 from django.http import Http404, HttpResponseRedirect
 from django.db import models
 from django.utils.functional import update_wrapper
@@ -272,6 +272,12 @@ class HaystackResultsAdmin(object):
             # meanwhile, casting the querystring parameter may raise ValueError
             # if it's None, or '', or other silly input.
             raise Http404
+
+        query = request.GET.get(self.get_search_var(request), None)
+        title = self.model._meta.verbose_name_plural
+        if query is not None:
+            title = string_concat(self.model._meta.verbose_name_plural, ' for "',
+                                  query, '"')
         context = {
             'results': self.get_wrapped_search_results(page.object_list),
             'pagination_required': page.has_other_pages(),
@@ -279,7 +285,7 @@ class HaystackResultsAdmin(object):
             'page_num': page.number,
             'result_count': paginator.count,
             'opts': self.model._meta,
-            'title': self.model._meta.verbose_name_plural,
+            'title': force_unicode(title),
             'root_path': getattr(self.admin_site, 'root_path', None),
             'app_label': self.model._meta.app_label,
             'filtered': True,
