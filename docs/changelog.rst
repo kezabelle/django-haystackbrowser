@@ -5,6 +5,20 @@ A list of changes which affect the API and related code follows. Documentation
 and other miscellaneous changes are not listed. See the git history for a
 complete history.
 
+May 2013
+^^^^^^^^
+
+  * |feature| Stored data view now includes a (translatable) count of the
+    stored/additional fields on the index.
+  * |bugfix| the *Clear filters* action on the changelist view is now only
+    displayed if the model count in the querystring does not match the
+    available models. Previously it was always displayed.
+  * |feature| If a query is present in the changelist view, discovered
+    results are fed through the ``highlight`` template tag to display
+    the appropriate snippet.
+  * |bugfix| *Content field*, *Score* and *Content* headers on the changelist
+    were previously not available for translation.
+
 April 2013
 ^^^^^^^^^^
 

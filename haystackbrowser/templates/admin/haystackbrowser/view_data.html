@@ -2,7 +2,13 @@
 <div id="content-main">
     <form>
         <fieldset class="module aligned">
-            <h2>{% trans "Stored fields" %}</h2>
+            <h2>
+                {% blocktrans count original.get_stored_field_count as field_count %}
+                    {{ field_count }} stored field
+                {% plural %}
+                    {{ field_count }} stored fields
+                {% endblocktrans %}
+            </h2>
             <div class="description">
                 Data returned from the <a href="http://django-haystack.readthedocs.org/en/latest/searchresult_api.html#get-stored-fields">Search Result's stored_fields</a>.<br>
                 <a href="http://django-haystack.readthedocs.org/en/latest/searchfield_api.html#stored">See here</a> for an explanation of what 'Stored' means
@@ -22,7 +28,13 @@
             {% endfor %}
         </fieldset>
         <fieldset class="module aligned">
-            <h2>{% trans "Additional fields" %}</h2>
+            <h2>
+            {% blocktrans count original.get_additional_field_count as field_count %}
+                    {{ field_count }} additional field
+                {% plural %}
+                    {{ field_count }} additional fields
+                {% endblocktrans %}
+            </h2>
             <div class="description">
                 Data returned from the <a href="http://django-haystack.readthedocs.org/en/latest/searchresult_api.html#get-additional-fields">Search Result's additional_fields</a>.
             </div>
