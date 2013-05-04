@@ -18,6 +18,9 @@ May 2013
     the appropriate snippet.
   * |bugfix| *Content field*, *Score* and *Content* headers on the changelist
     were previously not available for translation.
+  * |bugfix| *clear filters* is now a translatable string *clear all filters*
+  * |feature| The changelist title now better reflects the view by including
+    the query, if given.
 
 April 2013
 ^^^^^^^^^^
