@@ -256,11 +256,9 @@ class HaystackResultsAdmin(object):
 
         try:
             sqs = form.search()
-            things_to_facet = []
             for thing, value in sqs.site._field_mapping().items():
                 if value['facet_fieldname'] is not None:
-                    things_to_facet.append(value['facet_fieldname'])
-            sqs.facet(*things_to_facet)
+                    sqs = sqs.facet(value['facet_fieldname'])
             try:
                 page_no = int(request.GET.get(PAGE_VAR, 0))
             except ValueError:
@@ -278,7 +276,6 @@ class HaystackResultsAdmin(object):
             'results': self.get_wrapped_search_results(page.object_list),
             'pagination_required': page.has_other_pages(),
             'page_range': paginator.page_range,
-            'facets': sqs.facet_counts(),
             'page_num': page.number,
             'result_count': paginator.count,
             'opts': self.model._meta,
@@ -291,7 +288,7 @@ class HaystackResultsAdmin(object):
             'search_model_count': len(request.GET.getlist('models')),
             'search_var': self.get_search_var(request),
             'page_var': page_var,
-            'facet_counts': sqs.facet_counts(),
+            'facets': sqs.facet_counts(),
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
             'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta),
             # Note: the empty Media object isn't specficially required for the
