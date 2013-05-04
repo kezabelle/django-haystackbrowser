@@ -21,6 +21,11 @@ May 2013
   * |bugfix| *clear filters* is now a translatable string *clear all filters*
   * |feature| The changelist title now better reflects the view by including
     the query, if given.
+  * |feature| support for faceting (**experimental**)
+
+    * Requires a faceting backend (tested on *Solr*, known to be unsupported
+      on *Whoosh*)
+    * Only displays facets and their counts if a **query** is given.
 
 April 2013
 ^^^^^^^^^^
