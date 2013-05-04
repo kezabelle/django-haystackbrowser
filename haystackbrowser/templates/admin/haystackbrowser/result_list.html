@@ -42,15 +42,30 @@
             </div>
             <script type="text/javascript">document.getElementById("{{ form.q.id_for_label }}").focus();</script>
 
-            <h3>{% trans "Facets" %}</h3>
-            {{ facets }}
-            {{ form.selected_facets }}
-
             <h3>{% trans "Only models" %}</h3>
             {{ form.models }}
-            {{ form.selected_facets }}
             </form>
             <div style="padding-left: 10px;">{% if search_model_count != form.models.field.choices|length or request.GET.q %}<span class="small quiet"><a href="{{ request.path_info }}">clear filters</a></span>{% endif %}</div>
+
+            {% if facets and request.GET.q %}
+            <br>
+            <h2>{% trans "Facets" %}</h2>
+            {% for facet, items in facets.fields.items %}
+                <h3>{{ facet }}</h3>
+                <ul>
+                {% for k, v in items %}
+                    {% if v > 0 %}
+                        <li>
+                            <a href="{{ request.get_full_path }}&amp;selected_facets={{ facet }}__exact:{{ k|urlencode }}">
+                                {{ k }} ({{ v }})
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            {% endfor %}
+            {% endif %}
+
             </div>
         {% endblock filters %}
 
