@@ -272,7 +272,7 @@ class HaystackResultsAdmin(object):
 
         query = request.GET.get(self.get_search_var(request), None)
         title = self.model._meta.verbose_name_plural
-        if query is not None:
+        if query:
             title = string_concat(self.model._meta.verbose_name_plural, ' for "',
                                   query, '"')
         context = {
