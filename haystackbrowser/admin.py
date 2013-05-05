@@ -317,6 +317,7 @@ class HaystackResultsAdmin(object):
         query = {DJANGO_ID: pk, DJANGO_CT: content_type}
         try:
             sqs = self.get_wrapped_search_results(SearchQuerySet().filter(**query)[:1])[0]
+            more_like_this = self.get_wrapped_search_results(SearchQuerySet().more_like_this(sqs.object.object)[:5])
         except IndexError:
             raise Http404
         context = {
@@ -325,7 +326,8 @@ class HaystackResultsAdmin(object):
             'app_label': self.model._meta.app_label,
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
             'haystack_settings': self.get_settings(),
-            'has_change_permission': self.has_change_permission(request, sqs)
+            'has_change_permission': self.has_change_permission(request, sqs),
+            'similar_objects': more_like_this,
         }
         return render_to_response('admin/haystackbrowser/view.html', context,
             context_instance=RequestContext(request))
