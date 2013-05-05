@@ -11,7 +11,7 @@ from django.contrib.admin.views.main import PAGE_VAR, SEARCH_VAR
 from django.conf import settings
 from haystack.query import SearchQuerySet
 from haystack.forms import model_choices
-from haystackbrowser.models import HaystackResults, SearchResultWrapper
+from haystackbrowser.models import HaystackResults, SearchResultWrapper, FacetWrapper
 from haystackbrowser.forms import PreSelectedModelSearchForm
 from haystackbrowser.utils import get_haystack_settings
 from django.forms import Media
@@ -256,9 +256,6 @@ class HaystackResultsAdmin(object):
 
         try:
             sqs = form.search()
-            for thing, value in sqs.site._field_mapping().items():
-                if value['facet_fieldname'] is not None:
-                    sqs = sqs.facet(value['facet_fieldname'])
             try:
                 page_no = int(request.GET.get(PAGE_VAR, 0))
             except ValueError:
@@ -294,7 +291,7 @@ class HaystackResultsAdmin(object):
             'search_model_count': len(request.GET.getlist('models')),
             'search_var': self.get_search_var(request),
             'page_var': page_var,
-            'facets': sqs.facet_counts(),
+            'facets': FacetWrapper(sqs.facet_counts()),
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
             'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta),
             # Note: the empty Media object isn't specficially required for the

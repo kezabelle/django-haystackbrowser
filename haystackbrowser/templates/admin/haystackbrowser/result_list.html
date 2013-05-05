@@ -44,27 +44,31 @@
 
             <h3>{% trans "Only models" %}</h3>
             {{ form.models }}
+
+            {% if form.possible_facets.field.choices|length > 0 %}
+            <h3>{% trans "Finding facets on" %}</h3>
+            {{ form.possible_facets }}
+            {% endif %}
             </form>
             <div style="padding-left: 10px;">{% if search_model_count != form.models.field.choices|length or request.GET.q %}<span class="small quiet"><a href="{{ request.path_info }}">{% trans "clear all filters" %}</a></span>{% endif %}</div>
 
-            {% if facets and request.GET.q %}
-            <br>
-            <h2>{% trans "Facets" %}</h2>
-            {% for facet, items in facets.fields.items %}
-                <h3>{{ facet }}</h3>
+            {% if facets and form.possible_facets.field.choices|length > 0 %}
+            <h2>{% trans "Facets & counts" %}</h2>
+
+            {% regroup facets.get_field_facets|dictsort:"field" by field as facet_list %}
+            {% for facet_type in facet_list %}
+                <h3>{{ facet_type.grouper }}</h3>
                 <ul>
-                {% for k, v in items %}
-                    {% if v > 0 %}
-                        <li>
-                            <a href="{{ request.get_full_path }}&amp;selected_facets={{ facet }}__exact:{{ k|urlencode }}">
-                                {{ k }} ({{ v }})
-                            </a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
+                    {% for item in facet_type.list %}
+                      <li>
+                          <a href="{{ request.get_full_path }}&amp;selected_facets={{ facet_type.grouper }}__exact:{{ item.value|urlencode }}">
+                              {{ item.value }}</a>&nbsp;({{ item.count }})
+                      </li>
+                    {% endfor %}
                 </ul>
             {% endfor %}
             {% endif %}
+
 
             </div>
         {% endblock filters %}
