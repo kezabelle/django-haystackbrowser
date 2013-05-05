@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.forms import MultipleChoiceField, CheckboxSelectMultiple
 from haystack.forms import ModelSearchForm, FacetedModelSearchForm
 
@@ -12,7 +13,8 @@ class PreSelectedModelSearchForm(FacetedModelSearchForm):
         If we're in a recognised faceting engine, display and allow faceting.
         """
         super(PreSelectedModelSearchForm, self).__init__(*args, **kwargs)
-        self.fields['possible_facets'].choices = self.configure_faceting()
+        if self.should_allow_faceting():
+            self.fields['possible_facets'].choices = self.configure_faceting()
 
     def configure_faceting(self):
         try:
@@ -28,6 +30,19 @@ class PreSelectedModelSearchForm(FacetedModelSearchForm):
                     possible_facets.append(v['facet_fieldname'])
         return [(x, x) for x in possible_facets]
 
+    def should_allow_faceting(self):
+        engine = getattr(settings, 'HAYSTACK_SEARCH_ENGINE', None)
+        if engine is not None and engine in ('solr', 'xapian'):
+            return True
+        engine = getattr(settings, 'HAYSTACK_CONNECTIONS', {})
+        try:
+            engine = engine['default']['ENGINE']
+            if 'solr' in engine or 'xapian' in engine:
+                return True
+        except KeyError as e:
+            raise ImproperlyConfigured("I think you're on Haystack 2.x without "
+                                       "a `HAYSTACK_CONNECTIONS` dictionary")
+        return False
 
     def no_query_found(self):
         """
