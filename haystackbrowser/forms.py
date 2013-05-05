@@ -12,13 +12,22 @@ class PreSelectedModelSearchForm(FacetedModelSearchForm):
         If we're in a recognised faceting engine, display and allow faceting.
         """
         super(PreSelectedModelSearchForm, self).__init__(*args, **kwargs)
-        engine = getattr(settings, 'HAYSTACK_SEARCH_ENGINE', 'none')
-        if engine in ('solr', 'xapian'):
+        self.fields['possible_facets'].choices = self.configure_faceting()
+
+    def configure_faceting(self):
+        try:
+            # 2.x
+            from haystack import connections
+            facet_fields = connections['default'].get_unified_index()._facet_fieldnames
+            possible_facets = facet_fields.keys()
+        except ImportError as e:
+            # 1.x
             possible_facets = []
             for k, v in self.searchqueryset.site._field_mapping().items():
                 if v['facet_fieldname'] is not None:
                     possible_facets.append(v['facet_fieldname'])
-            self.fields['possible_facets'].choices = [(x, x) for x in possible_facets]
+        return [(x, x) for x in possible_facets]
+
 
     def no_query_found(self):
         """
