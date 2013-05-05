@@ -299,7 +299,7 @@ class HaystackResultsAdmin(object):
             'media': Media()
         }
         return render_to_response('admin/haystackbrowser/result_list.html', context,
-            context_instance=RequestContext(request))
+                                  context_instance=RequestContext(request))
 
     def view(self, request, content_type, pk):
         """The view for showing the results of a single item in the Haystack index.
@@ -329,5 +329,5 @@ class HaystackResultsAdmin(object):
             'similar_objects': more_like_this,
         }
         return render_to_response('admin/haystackbrowser/view.html', context,
-            context_instance=RequestContext(request))
+                                  context_instance=RequestContext(request))
 admin.site.register(HaystackResults, HaystackResultsAdmin)
