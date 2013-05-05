@@ -23,9 +23,10 @@ May 2013
     the query, if given.
   * |feature| support for faceting (**experimental**)
 
-    * Requires a faceting backend (tested on *Solr*, known to be unsupported
-      on *Whoosh*)
-    * Only displays facets and their counts if a **query** is given.
+    * Requires a faceting backend (see `backend capabilities`_) - currently
+      only Solr and Xapian are whitelisted, and only Solr tested.
+    * Provides a list of possible fields on which to facet.
+    * Faceting is done based on selected fields.
 
 April 2013
 ^^^^^^^^^^
@@ -79,3 +80,4 @@ September 2012
 .. _David Novakovic: http://blog.dpn.name/
 .. _dpnova: https://github.com/dpnova/
 .. _GitHub: https://github.com/
+.. _backend capabilities: http://django-haystack.readthedocs.org/en/latest/backend_support.html#backend-capabilities

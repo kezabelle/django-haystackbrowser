@@ -99,6 +99,8 @@ django-haystackbrowser should hopefully run on:
   * **Django 1.2** or higher;
   * **Haystack 1.2** or higher.
 
+    * Untested on the **Haystack 2.0 beta**.
+
 It additionally depends on ``django-classy-tags``, though only to use the provided
 template tags, which are entirely optional.
 
@@ -151,14 +153,16 @@ them::
 
 With the  `requirements`_ met and the `installation`_ complete, the only thing that's
 left to do is sign in to the AdminSite, and verify the new *Search results* app
-works. It probably won't, in which case you'd be doing me a favour if you filed
-a ticket on the `issue tracker`_!
+works.
 
-Assuming it does work, you can augment your existing ModelAdmins by using
+Extending admin changeforms
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Assuming it works, you can augment your existing ModelAdmins by using
 (or copy-pasting from) the templates available:
 
 * ``admin/haystackbrowser/change_form_with_link.html`` adds a link
-  (alongside the *history* and *view on site* links) to the corresponding
+  (alongside the **history** and **view on site** links) to the corresponding
   stored data view for the current object.
 * ``admin/haystackbrowser/change_form_with_data.html`` displays all
   the stored data for the current object, on the same screen, beneath the standard
@@ -189,8 +193,9 @@ Contributing
 Please do!
 
 The project is hosted on `GitHub`_ in the `kezabelle/django-haystackbrowser`_
-repository. The main branch is `master`_, but all work is carried out on
-`develop`_ and merged in.
+repository. The main/stable branch is `master`_; ongoing work happens on
+either `develop`_ or a feature branch, depending on my mood or the
+scale of the changes.
 
 Bug reports and feature requests can be filed on the repository's `issue tracker`_.
 
@@ -209,8 +214,8 @@ The following people have been of help, in some capacity.
 TODO
 ----
 
- * Possibly figure out how to turn the model filtering into a decent Faceted
-   search.
+ * Ensure the new faceting features work as intended (the test database I
+   have doesn't *really* cover enough, yet)
 
 Known issues
 ------------
