@@ -18,6 +18,7 @@ from django.forms import Media
 try:
     from haystack.constants import DJANGO_CT, DJANGO_ID
 except ImportError:
+    # really old haystack, early in 1.2 series?
     DJANGO_CT = 'django_ct'
     DJANGO_ID = 'django_id'
 
