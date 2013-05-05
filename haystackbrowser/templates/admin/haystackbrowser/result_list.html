@@ -61,7 +61,7 @@
                 <ul>
                     {% for item in facet_type.list %}
                       <li>
-                          <a href="{{ request.get_full_path }}&amp;selected_facets={{ facet_type.grouper }}__exact:{{ item.value|urlencode }}">
+                          <a href="{{ request.get_full_path }}&amp;selected_facets={{ facet_type.grouper }}:{{ item.value|urlencode }}">
                               {{ item.value }}</a>&nbsp;({{ item.count }})
                       </li>
                     {% endfor %}
