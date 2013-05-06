@@ -8,19 +8,8 @@ complete history.
 May 2013
 ^^^^^^^^
 
-  * |feature| Stored data view now includes a (translatable) count of the
-    stored/additional fields on the index.
-  * |bugfix| the *Clear filters* action on the changelist view is now only
-    displayed if the model count in the querystring does not match the
-    available models. Previously it was always displayed.
-  * |feature| If a query is present in the changelist view, discovered
-    results are fed through the ``highlight`` template tag to display
-    the appropriate snippet.
-  * |bugfix| *Content field*, *Score* and *Content* headers on the changelist
-    were previously not available for translation.
-  * |bugfix| *clear filters* is now a translatable string *clear all filters*
-  * |feature| The changelist title now better reflects the view by including
-    the query, if given.
+  * |feature| Supports the **Haystack 2.0 beta** changes, while maintaining
+    1.x support.
   * |feature| support for faceting (**experimental**)
 
     * Requires a faceting backend (see `backend capabilities`_) - currently
@@ -30,8 +19,19 @@ May 2013
 
   * |feature| the *Stored data view* now makes use of `more like this`_
     to display other objects in the index which are similar.
-  * |feature| Supports the **Haystack 2.0 beta** changes, while maintaining
-    1.x support.
+  * |feature| If a query is present in the changelist view, discovered
+    results are fed through the ``highlight`` template tag to display
+    the appropriate snippet.
+  * |feature| Stored data view now includes a (translatable) count of the
+    stored/additional fields on the index.
+  * |feature| The changelist title now better reflects the view by including
+    the query, if given.
+  * |bugfix| *Content field*, *Score* and *Content* headers on the changelist
+    were previously not available for translation.
+  * |bugfix| the *Clear filters* action on the changelist view is now only
+    displayed if the model count in the querystring does not match the
+    available models. Previously it was always displayed.
+  * |bugfix| *clear filters* is now a translatable string *clear all filters*
 
 April 2013
 ^^^^^^^^^^
