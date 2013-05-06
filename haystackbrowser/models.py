@@ -3,6 +3,7 @@ from django.db import models
 from django.core.urlresolvers import NoReverseMatch, reverse
 from django.utils.translation import ugettext_lazy as _
 
+
 class HaystackResults(models.Model):
     """ Our fake model, used for mounting :py:class:`~haystackbrowser.admin.HaystackResultsAdmin`
     onto the appropriate AdminSite.
@@ -15,6 +16,7 @@ class HaystackResults(models.Model):
         managed = False
         verbose_name = _('Search result')
         verbose_name_plural = _('Search results')
+
 
 class SearchResultWrapper(object):
     """Value object which consumes a standard Haystack SearchResult, and the current
@@ -122,3 +124,47 @@ class SearchResultWrapper(object):
         return getattr(self.object, attr)
 
 
+class FacetWrapper(object):
+    """
+    A simple wrapper around `sqs.facet_counts()` to filter out things with
+    0, and re-arrange the data in such a way that the template can handle it.
+    """
+
+    def __init__(self, facet_counts):
+        self.dates = facet_counts.get('dates', ())
+        self.fields = facet_counts.get('fields', ())
+        self.queries = facet_counts.get('queries', ())
+
+        self._total_count = len(self.dates) + len(self.fields) + len(self.queries)
+
+    def get_facets_from(self, x):
+        if x not in ('dates', 'queries', 'fields'):
+            raise AttributeError('Wrong field, silly.')
+
+        for field, items in getattr(self, x).items():
+            for content, count in items:
+                if count > 0:
+                    yield {'field': field, 'value': content, 'count': count}
+
+    def get_field_facets(self):
+        return self.get_facets_from('fields')
+
+    def get_date_facets(self):
+        return self.get_facets_from('dates')
+
+    def get_query_facets(self):
+        return self.get_facets_from('queries')
+
+    def __bool__(self):
+        """
+        Used for doing `if facets: print(facets)` - this is the Python 2 magic
+        method; __nonzero__ is the equivalent thing in Python 3
+        """
+        return self._total_count > 0
+    __nonzero__ = __bool__
+
+    def __len__(self):
+        """
+        For checking things via `if len(facets) > 0: print(facets)`
+        """
+        return self._total_count

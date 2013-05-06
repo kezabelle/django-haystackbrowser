@@ -21,6 +21,12 @@ May 2013
   * |bugfix| *clear filters* is now a translatable string *clear all filters*
   * |feature| The changelist title now better reflects the view by including
     the query, if given.
+  * |feature| support for faceting (**experimental**)
+
+    * Requires a faceting backend (see `backend capabilities`_) - currently
+      only Solr and Xapian are whitelisted, and only Solr tested.
+    * Provides a list of possible fields on which to facet.
+    * Faceting is done based on selected fields.
 
 April 2013
 ^^^^^^^^^^
@@ -74,3 +80,4 @@ September 2012
 .. _David Novakovic: http://blog.dpn.name/
 .. _dpnova: https://github.com/dpnova/
 .. _GitHub: https://github.com/
+.. _backend capabilities: http://django-haystack.readthedocs.org/en/latest/backend_support.html#backend-capabilities

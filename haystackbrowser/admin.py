@@ -10,7 +10,7 @@ from django.contrib.admin.views.main import PAGE_VAR, SEARCH_VAR
 from django.conf import settings
 from haystack.query import SearchQuerySet
 from haystack.forms import model_choices
-from haystackbrowser.models import HaystackResults, SearchResultWrapper
+from haystackbrowser.models import HaystackResults, SearchResultWrapper, FacetWrapper
 from haystackbrowser.forms import PreSelectedModelSearchForm
 from haystackbrowser.utils import get_haystack_settings
 from django.forms import Media
@@ -272,7 +272,7 @@ class HaystackResultsAdmin(object):
 
         query = request.GET.get(self.get_search_var(request), None)
         title = self.model._meta.verbose_name_plural
-        if query is not None:
+        if query:
             title = string_concat(self.model._meta.verbose_name_plural, ' for "',
                                   query, '"')
         context = {
@@ -291,6 +291,7 @@ class HaystackResultsAdmin(object):
             'search_model_count': len(request.GET.getlist('models')),
             'search_var': self.get_search_var(request),
             'page_var': page_var,
+            'facets': FacetWrapper(sqs.facet_counts()),
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
             'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta),
             # Note: the empty Media object isn't specficially required for the
