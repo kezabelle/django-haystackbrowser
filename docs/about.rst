@@ -71,8 +71,8 @@ The default landing page, the list view, shows the following fields:
   * The first few words of that primary content field.
 
 It also allows you to perform searches against the index, optionally filtering
-by specific models. That's functionality `Haystack`_ provides out of the box, so
-should be familiar.
+by specific models or faceted fields. That's functionality `Haystack`_ provides
+out of the box, so should be familiar.
 
 Stored data view
 ^^^^^^^^^^^^^^^^
@@ -85,6 +85,7 @@ up the stored data view, which is the most useful part of it.
     (usually, ``text``);
   * Shows all additional fields;
   * Shows any `Haystack`_ specific settings in the settings module.
+  * Shows up to **5** similar objects, if the backend supports it.
 
 The stored data view, like the list view, provides links to the relevant admin
 pages for the app/model/instance if appropriate.
