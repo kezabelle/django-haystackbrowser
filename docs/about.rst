@@ -97,9 +97,7 @@ Requirements and dependencies
 django-haystackbrowser should hopefully run on:
 
   * **Django 1.2** or higher;
-  * **Haystack 1.2** or higher.
-
-    * Untested on the **Haystack 2.0 beta**.
+  * **Haystack 1.2** or higher (including **2.0 beta**!)
 
 It additionally depends on ``django-classy-tags``, though only to use the provided
 template tags, which are entirely optional.

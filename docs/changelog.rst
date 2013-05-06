@@ -28,6 +28,11 @@ May 2013
     * Provides a list of possible fields on which to facet.
     * Faceting is done based on selected fields.
 
+  * |feature| the *Stored data view* now makes use of `more like this`_
+    to display other objects in the index which are similar.
+  * |feature| Supports the **Haystack 2.0 beta** changes, while maintaining
+    1.x support.
+
 April 2013
 ^^^^^^^^^^
 
@@ -81,3 +86,4 @@ September 2012
 .. _dpnova: https://github.com/dpnova/
 .. _GitHub: https://github.com/
 .. _backend capabilities: http://django-haystack.readthedocs.org/en/latest/backend_support.html#backend-capabilities
+.. _more like this: http://django-haystack.readthedocs.org/en/latest/searchqueryset_api.html#more-like-this
