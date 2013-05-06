@@ -50,11 +50,10 @@
             {{ form.possible_facets }}
             {% endif %}
             </form>
-
             {% if search_model_count != form.models.field.choices|length or request.GET.q or search_facet_count > 0 %}
             <div style="padding-left: 10px;">
                 <span class="small quiet">
-                    <a href="{{ request.path_info }}">
+                    <a href="{{ request.path_info }}?{% for k,v in form.models.field.choices %}&amp;models={{ k }}{% endfor %}">
                         {% trans "clear all filters" %}
                     </a>
                 </span>
