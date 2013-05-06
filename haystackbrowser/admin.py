@@ -289,6 +289,7 @@ class HaystackResultsAdmin(object):
             'form': form,
             'query_string': self.get_current_query_string(request, remove=['p']),
             'search_model_count': len(request.GET.getlist('models')),
+            'search_facet_count': len(request.GET.getlist('possible_facets')),
             'search_var': self.get_search_var(request),
             'page_var': page_var,
             'facets': FacetWrapper(sqs.facet_counts()),
