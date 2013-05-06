@@ -54,10 +54,11 @@
             <div class="description">
                 {% trans "All relevant settings found in the Django settings module." %}
             </div>
-            {% for key, value in haystack_settings.items %}
+            {% for setting in haystack_settings %}
                 <div class="form-row">
-                    <label for="{{ key }}">{{ key }}</label>
-                    <p id="{{ key }}">{{ value }}</p>
+                    <label for="{{ setting.0 }}">{{ setting.0 }}</label>
+                    <p id="{{ setting.0 }}">{{ setting.1 }}</p>
+                    {% if setting.2 %}<p class="help">{{ setting.2 }} backend</p>{% endif %}
                 </div>
             {% empty %}
                 <div class="form-row errors">
