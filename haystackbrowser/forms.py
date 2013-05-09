@@ -6,7 +6,7 @@ from haystack.forms import ModelSearchForm, FacetedModelSearchForm
 
 class PreSelectedModelSearchForm(FacetedModelSearchForm):
     possible_facets = MultipleChoiceField(widget=CheckboxSelectMultiple,
-                                          choices=())
+                                          choices=(), required=False)
 
     def __init__(self, *args, **kwargs):
         """
