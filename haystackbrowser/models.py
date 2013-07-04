@@ -131,9 +131,9 @@ class FacetWrapper(object):
     """
 
     def __init__(self, facet_counts):
-        self.dates = facet_counts.get('dates', ())
-        self.fields = facet_counts.get('fields', ())
-        self.queries = facet_counts.get('queries', ())
+        self.dates = facet_counts.get('dates', {})
+        self.fields = facet_counts.get('fields', {})
+        self.queries = facet_counts.get('queries', {})
 
         self._total_count = len(self.dates) + len(self.fields) + len(self.queries)
 
