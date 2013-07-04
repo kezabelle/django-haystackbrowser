@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.contrib import admin
 from django.contrib.admin.views.main import PAGE_VAR, SEARCH_VAR
 from django.conf import settings
+from haystack import __version__
 from haystack.query import SearchQuerySet
 from haystack.forms import model_choices
 from haystackbrowser.models import HaystackResults, SearchResultWrapper, FacetWrapper
@@ -22,6 +23,7 @@ except ImportError:
     DJANGO_CT = 'django_ct'
     DJANGO_ID = 'django_id'
 
+_haystack_version = '.'.join([str(x) for x in __version__])
 
 def get_query_string(query_params, new_params=None, remove=None):
     # TODO: make this bettererer. Use propery dicty stuff on the Querydict?
@@ -295,6 +297,7 @@ class HaystackResultsAdmin(object):
             'facets': FacetWrapper(sqs.facet_counts()),
             'module_name': force_unicode(self.model._meta.verbose_name_plural),
             'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta),
+            'haystack_version': _haystack_version,
             # Note: the empty Media object isn't specficially required for the
             # standard Django admin, but is apparently a pre-requisite for
             # things like Grappelli.
@@ -330,6 +333,7 @@ class HaystackResultsAdmin(object):
             'haystack_settings': self.get_settings(),
             'has_change_permission': self.has_change_permission(request, sqs),
             'similar_objects': more_like_this,
+            'haystack_version': _haystack_version,
         }
         return render_to_response('admin/haystackbrowser/view.html', context,
                                   context_instance=RequestContext(request))

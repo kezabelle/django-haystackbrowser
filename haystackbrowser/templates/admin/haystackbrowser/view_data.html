@@ -50,7 +50,11 @@
             {% endfor %}
         </fieldset>
         <fieldset class="module aligned">
-            <h2>{% trans "Haystack settings" %}</h2>
+            <h2>
+                {% blocktrans with haystack_version as version %}
+                Haystack v{{ version }} settings
+                {% endblocktrans %}
+            </h2>
             <div class="description">
                 {% trans "All relevant settings found in the Django settings module." %}
             </div>
