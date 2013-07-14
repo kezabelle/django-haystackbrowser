@@ -32,8 +32,10 @@ class PreSelectedModelSearchForm(FacetedModelSearchForm):
 
     def should_allow_faceting(self):
         engine = getattr(settings, 'HAYSTACK_SEARCH_ENGINE', None)
-        if engine is not None and engine in ('solr', 'xapian'):
-            return True
+
+        if engine is not None:
+            return engine in ('solr', 'xapian')
+
         engine = getattr(settings, 'HAYSTACK_CONNECTIONS', {})
         try:
             engine = engine['default']['ENGINE']
