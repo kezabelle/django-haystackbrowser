@@ -31,19 +31,21 @@ class PreSelectedModelSearchForm(FacetedModelSearchForm):
         return [(x, x) for x in possible_facets]
 
     def should_allow_faceting(self):
-        engine = getattr(settings, 'HAYSTACK_SEARCH_ENGINE', None)
+        engine_1x = getattr(settings, 'HAYSTACK_SEARCH_ENGINE', None)
 
-        if engine is not None:
-            return engine in ('solr', 'xapian')
+        if engine_1x is not None:
+            return engine_1x in ('solr', 'xapian')
 
-        engine = getattr(settings, 'HAYSTACK_CONNECTIONS', {})
+        engine_2x = getattr(settings, 'HAYSTACK_CONNECTIONS', {})
         try:
-            engine = engine['default']['ENGINE']
-            if 'solr' in engine or 'xapian' in engine:
-                return True
+            engine_2xdefault = engine_2x['default']['ENGINE']
+            return 'solr' in engine_2xdefault or 'xapian' in engine_2xdefault
         except KeyError as e:
             raise ImproperlyConfigured("I think you're on Haystack 2.x without "
                                        "a `HAYSTACK_CONNECTIONS` dictionary")
+        # I think this is unreachable, but for safety's sake we're going to
+        # assume that if it got here, we can't know faceting is OK and working
+        # so we'll disable the feature.
         return False
 
     def no_query_found(self):
