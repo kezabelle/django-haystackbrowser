@@ -129,11 +129,18 @@ class HaystackResultsAdmin(object):
 
     def urls(self):
         """Sets up the required urlconf for the admin views."""
-        from django.conf.urls.defaults import patterns, url
+        try:
+            # <1.4
+            from django.conf.urls.defaults import patterns, url
+        except ImportError as e:
+            # >=1.5
+            from django.conf.urls import patterns, url
+
         def wrap(view):
             def wrapper(*args, **kwargs):
                 return self.admin_site.admin_view(view)(*args, **kwargs)
             return update_wrapper(wrapper, view)
+
         return patterns('',
             url(regex=r'^(?P<content_type>.+)/(?P<pk>.+)/$',
                 view=self.view,
