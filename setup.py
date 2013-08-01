@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 from setuptools import setup, find_packages
-from haystackbrowser import version
 
 SHORT_DESC = (u'A reusable Django application for viewing and debugging '
                     u'all the data that has been pushed into Haystack')
@@ -30,12 +29,12 @@ PACKAGES = find_packages()
 
 setup(
     name='django-haystackbrowser',
-    version=version,
+    version='0.4.0',
     description=SHORT_DESC,
     author='Keryn Knight',
     author_email='python-package@kerynknight.com',
-    license = "BSD License",
-    keywords = "django",
+    license="BSD License",
+    keywords="django",
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
     url='https://github.com/kezabelle/django-haystackbrowser/tree/master',
     packages=PACKAGES,
