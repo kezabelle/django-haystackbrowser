@@ -59,9 +59,9 @@
                 {% trans "All relevant settings found in the Django settings module." %}
             </div>
             {% for setting in haystack_settings %}
-                <div class="form-row">
+                <div class="form-row {% if request.GET.connection == setting.2 %}required errors{% endif %}">
                     <label for="{{ setting.0 }}">{{ setting.0 }}</label>
-                    <p id="{{ setting.0 }}">{{ setting.1 }}</p>
+                    <p id="{{ setting.0|slugify }}">{{ setting.1 }}</p>
                     {% if setting.2 %}<p class="help">{{ setting.2 }} backend</p>{% endif %}
                 </div>
             {% empty %}

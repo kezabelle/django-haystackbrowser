@@ -32,9 +32,15 @@
         {% block filters %}
         <div id="changelist-filter">
             <h2>{% trans "Filter" %}</h2>
+            <form id="changelist-search" action="" method="get">
+            {% if not form.connection.is_hidden %}
+                <h3>{% trans "Connection" %}</h3>
+                <div style="padding-left: 10px;">
+                {{ form.connection }}
+                </div>
+            {% endif %}
 
             <h3>{% trans "Contains" %}</h3>
-            <form id="changelist-search" action="" method="get">
 
             <div style="padding-left: 10px;">
                 {{ form.q }}

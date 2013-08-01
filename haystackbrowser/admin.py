@@ -130,11 +130,12 @@ class HaystackResultsAdmin(object):
     def urls(self):
         """Sets up the required urlconf for the admin views."""
         try:
-            # <1.4
-            from django.conf.urls.defaults import patterns, url
-        except ImportError as e:
-            # >=1.5
+            # > 1.5
             from django.conf.urls import patterns, url
+        except ImportError as e:
+            # < 1.5
+            from django.conf.urls.defaults import patterns, url
+
 
         def wrap(view):
             def wrapper(*args, **kwargs):
@@ -258,10 +259,14 @@ class HaystackResultsAdmin(object):
         # https://gist.github.com/3766607
         if 'models' not in request.GET.keys():
             # TODO: make this betterererer.
-            find_all_models = ['&models=%s' % x[0] for x in available_models]
-            find_all_models = ''.join(find_all_models)
+            new_qs = ['&models=%s' % x[0] for x in available_models]
+            # if we're in haystack2, we probably want to provide the 'default'
+            # connection so that it behaves as if "initial" were in place.
+            if form.has_multiple_connections():
+                new_qs.append('&connection=' + form.fields['connection'].initial)
+            new_qs = ''.join(new_qs)
             qs = self.get_current_query_string(request, remove=['p'])
-            return HttpResponseRedirect(request.path_info + qs + find_all_models)
+            return HttpResponseRedirect(request.path_info + qs + new_qs)
 
         try:
             sqs = form.search()
@@ -280,10 +285,13 @@ class HaystackResultsAdmin(object):
             raise Http404
 
         query = request.GET.get(self.get_search_var(request), None)
+        connection = request.GET.get('connection', None)
         title = self.model._meta.verbose_name_plural
         if query:
             title = string_concat(self.model._meta.verbose_name_plural, ' for "',
                                   query, '"')
+        if connection:
+            title = string_concat(title, ' using "', connection, '" connection')
         context = {
             'results': self.get_wrapped_search_results(page.object_list),
             'pagination_required': page.has_other_pages(),
