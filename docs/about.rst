@@ -74,6 +74,9 @@ It also allows you to perform searches against the index, optionally filtering
 by specific models or faceted fields. That's functionality `Haystack`_ provides
 out of the box, so should be familiar.
 
+If your `Haystack`_ configuration includes multiple connections, you can pick
+and choose which one to use on a per-query basis.
+
 Stored data view
 ^^^^^^^^^^^^^^^^
 
