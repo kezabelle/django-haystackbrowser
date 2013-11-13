@@ -32,8 +32,12 @@
     {% endif %}
     </td>
 <td>
-    <a href="{{ result.content_type }}/{{ result.pk }}/?{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.connection %}&connection={{ request.GET.connection }}{% endif %}">
+    {% if result.get_detail_url %}
+    <a href="{% result.get_detail_url %}?{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.connection %}&connection={{ request.GET.connection }}{% endif %}">
         {% trans 'View stored data' %}
     </a>
+    {% else %}
+    &nbsp;
+    {% endif %}
 </td>
 
