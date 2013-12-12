@@ -1,6 +1,11 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.forms import MultipleChoiceField, CheckboxSelectMultiple, ChoiceField, HiddenInput
+from django.forms import (MultipleChoiceField, CheckboxSelectMultiple,
+                          ChoiceField, HiddenInput)
+try:
+    from django.utils.encoding import force_text
+except ImportError:  # < Django 1.5
+    from django.utils.encoding import force_unicode as force_text
 from haystack.forms import ModelSearchForm, FacetedModelSearchForm
 
 
@@ -47,7 +52,8 @@ class PreSelectedModelSearchForm(FacetedModelSearchForm):
 
     def get_possible_connections(self):
         engine_2x = getattr(settings, 'HAYSTACK_CONNECTIONS', {})
-        return ((unicode(x), unicode(x)) for x in sorted(engine_2x.keys()))
+        return ((force_text(x), force_text(x))
+                for x in sorted(engine_2x.keys()))
 
     def configure_faceting(self):
         if self.version == 2:
