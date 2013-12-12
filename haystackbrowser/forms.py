@@ -21,7 +21,7 @@ class PreSelectedModelSearchForm(FacetedModelSearchForm):
 
         if self.has_multiple_connections():
             self.fields['connection'].choices = self.get_possible_connections()
-            self.fields['connection'].initial = u'default'
+            self.fields['connection'].initial = 'default'
         else:
             self.fields['connection'].widget = HiddenInput()
 
