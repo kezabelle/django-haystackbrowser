@@ -18,8 +18,7 @@ from django.forms import Media
 
 try:
     from haystack.constants import DJANGO_CT, DJANGO_ID
-except ImportError:
-    # really old haystack, early in 1.2 series?
+except ImportError:  # really old haystack, early in 1.2 series?
     DJANGO_CT = 'django_ct'
     DJANGO_ID = 'django_id'
 
@@ -57,10 +56,13 @@ class FakeChangeListForPaginator(object):
         self.request = request
         self.opts = model_opts
 
-
     def get_query_string(self, a_dict):
         """ Method to return a querystring appropriate for pagination."""
         return get_query_string(self.request.GET, a_dict)
+
+
+class Search404(Http404):
+    pass
 
 
 class HaystackResultsAdmin(object):
@@ -249,8 +251,8 @@ class HaystackResultsAdmin(object):
 
         # Make sure there are some models indexed
         available_models = model_choices()
-        if len(available_models) < 0:
-            raise Http404
+        if len(available_models) <= 0:
+            raise Search404('No search indexes bound via Haystack')
 
         # We've not selected any models, so we're going to redirect and select
         # all of them. This will bite me in the ass if someone searches for a string
@@ -282,7 +284,7 @@ class HaystackResultsAdmin(object):
             # paginator.page may raise InvalidPage if we've gone too far
             # meanwhile, casting the querystring parameter may raise ValueError
             # if it's None, or '', or other silly input.
-            raise Http404
+            raise Search404("Invalid page")
 
         query = request.GET.get(self.get_search_var(request), None)
         connection = request.GET.get('connection', None)
@@ -339,7 +341,8 @@ class HaystackResultsAdmin(object):
             sqs = self.get_wrapped_search_results(SearchQuerySet().filter(**query)[:1])[0]
             more_like_this = self.get_wrapped_search_results(SearchQuerySet().more_like_this(sqs.object.object)[:5])
         except IndexError:
-            raise Http404
+            raise Search404("Search result using query {q!r} does not exist".format(
+                q=query))
         context = {
             'original': sqs,
             'title': _('View stored data for this %s') % force_unicode(sqs.verbose_name),
