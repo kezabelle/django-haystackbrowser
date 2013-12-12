@@ -1,3 +1,4 @@
+import logging
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.forms import (MultipleChoiceField, CheckboxSelectMultiple,
@@ -7,6 +8,8 @@ try:
 except ImportError:  # < Django 1.5
     from django.utils.encoding import force_unicode as force_text
 from haystack.forms import ModelSearchForm, FacetedModelSearchForm
+
+logger = logging.getLogger(__name__)
 
 
 class PreSelectedModelSearchForm(FacetedModelSearchForm):
@@ -38,8 +41,10 @@ class PreSelectedModelSearchForm(FacetedModelSearchForm):
 
     def guess_haystack_version(self):
         if self.is_haystack1():
+            logger.debug("Guessed Haystack 1.2.x")
             return 1
         if self.is_haystack2():
+            logger.debug("Guessed Haystack 2.x")
             return 2
         return None
 
