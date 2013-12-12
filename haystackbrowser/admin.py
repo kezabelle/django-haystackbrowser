@@ -5,7 +5,10 @@ except ImportError:  # < Django 1.5
     from django.utils.encoding import force_unicode as force_text
 from django.utils.translation import ugettext_lazy as _, string_concat
 from django.http import Http404, HttpResponseRedirect
-from django.utils.functional import update_wrapper
+try:
+    from functools import update_wrapper
+except ImportError:  # < Django 1.6
+    from django.utils.functional import update_wrapper
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import admin
