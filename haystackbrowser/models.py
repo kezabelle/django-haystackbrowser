@@ -75,12 +75,11 @@ class SearchResultWrapper(object):
         try:
             urlname = '%s:haystackbrowser_haystackresults_change' % self.admin
             return reverse(urlname, kwargs={
-                'content_type': '.'.join(self.object.app_label,
-                                         self.object.model_name),
+                'content_type': '.'.join([self.object.app_label,
+                                          self.object.model_name]),
                 'pk': self.object.pk})
         except NoReverseMatch:
             return None
-
 
     def get_additional_fields(self):
         """Find all fields in the Haystack SearchResult which have not already
