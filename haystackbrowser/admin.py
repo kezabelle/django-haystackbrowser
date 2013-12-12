@@ -1,5 +1,8 @@
 from django.core.paginator import Paginator, InvalidPage
-from django.utils.encoding import force_unicode
+try:
+    from django.utils.encoding import force_text
+except ImportError:  # < Django 1.5
+    from django.utils.encoding import force_unicode as force_text
 from django.utils.translation import ugettext_lazy as _, string_concat
 from django.http import Http404, HttpResponseRedirect
 from django.utils.functional import update_wrapper
@@ -301,7 +304,7 @@ class HaystackResultsAdmin(object):
             'page_num': page.number,
             'result_count': paginator.count,
             'opts': self.model._meta,
-            'title': force_unicode(title),
+            'title': force_text(title),
             'root_path': getattr(self.admin_site, 'root_path', None),
             'app_label': self.model._meta.app_label,
             'filtered': True,
@@ -312,7 +315,7 @@ class HaystackResultsAdmin(object):
             'search_var': self.get_search_var(request),
             'page_var': page_var,
             'facets': FacetWrapper(sqs.facet_counts()),
-            'module_name': force_unicode(self.model._meta.verbose_name_plural),
+            'module_name': force_text(self.model._meta.verbose_name_plural),
             'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta),
             'haystack_version': _haystack_version,
             # Note: the empty Media object isn't specficially required for the
@@ -345,9 +348,9 @@ class HaystackResultsAdmin(object):
                 q=query))
         context = {
             'original': sqs,
-            'title': _('View stored data for this %s') % force_unicode(sqs.verbose_name),
+            'title': _('View stored data for this %s') % force_text(sqs.verbose_name),
             'app_label': self.model._meta.app_label,
-            'module_name': force_unicode(self.model._meta.verbose_name_plural),
+            'module_name': force_text(self.model._meta.verbose_name_plural),
             'haystack_settings': self.get_settings(),
             'has_change_permission': self.has_change_permission(request, sqs),
             'similar_objects': more_like_this,
