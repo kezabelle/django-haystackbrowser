@@ -2,8 +2,8 @@
 import os
 from setuptools import setup, find_packages
 
-SHORT_DESC = (u'A reusable Django application for viewing and debugging '
-                    u'all the data that has been pushed into Haystack')
+SHORT_DESC = """A reusable Django application for viewing and debugging '
+all the data that has been pushed into Haystack"""
 
 REQUIREMENTS = [
     'Django>=1.2.0',
