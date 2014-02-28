@@ -211,6 +211,7 @@ The following people have been of help, in some capacity.
    me to stop it blowing up uncontrollably.
  * `David Novakovic`_, for getting it to at least work under **Grappelli**, and
    fixing an omission in the setup script.
+ * `Jussi Räsänen`_, for various fixes.
 
 TODO
 ----
