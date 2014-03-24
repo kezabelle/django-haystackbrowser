@@ -80,7 +80,12 @@ class PreSelectedModelSearchForm(FacetedModelSearchForm):
             engine_2x = getattr(settings, 'HAYSTACK_CONNECTIONS', {})
             try:
                 engine_2xdefault = engine_2x['default']['ENGINE']
-                return 'solr' in engine_2xdefault or 'xapian' in engine_2xdefault
+                ok_engines = (
+                    'solr' in engine_2xdefault,
+                    'xapian' in engine_2xdefault,
+                    'elasticsearch' in engine_2xdefault,
+                )
+                return any(ok_engines)
             except KeyError as e:
                 raise ImproperlyConfigured("I think you're on Haystack 2.x without "
                                            "a `HAYSTACK_CONNECTIONS` dictionary")
