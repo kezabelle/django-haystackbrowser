@@ -95,7 +95,8 @@ class HaystackResultsAdmin(object):
         self.opts = model._meta
         self.admin_site = admin_site
 
-    def validate(self, *args, **kwargs):
+    @classmethod
+    def validate(cls, *args, **kwargs):
         return
 
     def get_model_perms(self, request):
