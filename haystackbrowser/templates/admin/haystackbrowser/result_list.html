@@ -95,13 +95,13 @@
         <table cellspacing="0" id="result_list">
             <thead>
                 <tr>
-                    {% include "admin/haystackbrowser/result_list_headers.html" %}
+                    {% include "admin/haystackbrowser/result_list_headers.html" with filtered=filtered only %}
                 </tr>
             </thead>
             <tbody>
                 {% for result in results %}
                 <tr class="{% cycle 'row1' 'row2' %}">
-                    {% include "admin/haystackbrowser/result.html" %}
+                    {% include "admin/haystackbrowser/result.html"with result=result request=request filtered=filtered only %}
                 </tr>
                 {% endfor %}
             </tbody>
