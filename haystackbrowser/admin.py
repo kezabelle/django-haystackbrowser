@@ -307,7 +307,10 @@ class HaystackResultsAdmin(object):
         context = {
             'results': self.get_wrapped_search_results(page.object_list),
             'pagination_required': page.has_other_pages(),
-            'page_range': paginator.page_range,
+            # this may be expanded into xrange(*page_range) to copy what
+            # the paginator would yield. This prevents 50000+ pages making
+            # the page slow to render because of django-debug-toolbar.
+            'page_range': (1, paginator.num_pages + 1),
             'page_num': page.number,
             'result_count': paginator.count,
             'opts': self.model._meta,
