@@ -101,7 +101,7 @@
             <tbody>
                 {% for result in results %}
                 <tr class="{% cycle 'row1' 'row2' %}">
-                    {% include "admin/haystackbrowser/result.html"with result=result request=request filtered=filtered only %}
+                    {% include "admin/haystackbrowser/result.html" with result=result request=request filtered=filtered only %}
                 </tr>
                 {% endfor %}
             </tbody>
