@@ -13,6 +13,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import admin
 from django.contrib.admin.views.main import PAGE_VAR, SEARCH_VAR
+from django.contrib.admin.options import ModelAdmin
 from django.conf import settings
 from haystack import __version__
 from haystack.query import SearchQuerySet
@@ -180,7 +181,8 @@ class HaystackResultsAdmin(object):
 
         :return: The number of results to show, per page.
         """
-        return getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
+        return getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE',
+                       ModelAdmin.list_per_page)
 
     def get_paginator_var(self, request):
         """Provides the name of the variable used in query strings to discover
