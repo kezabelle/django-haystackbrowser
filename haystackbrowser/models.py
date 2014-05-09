@@ -32,6 +32,10 @@ class SearchResultWrapper(object):
     def __init__(self, obj, admin_site=None):
         self.admin = admin_site
         self.object = obj
+        if getattr(self.object, 'searchindex', None) is None:
+            # < Haystack 1.2
+            from haystack import site
+            self.object.searchindex = site.get_index(self.object.model)
 
     def get_app_url(self):
         """Resolves a given object's app into a link to the app administration.
