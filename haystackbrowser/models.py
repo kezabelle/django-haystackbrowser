@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+try:
+    from django.utils.encoding import force_text
+except ImportError:  # < Django 1.5
+    from django.utils.encoding import force_unicode as force_text
+from django.utils.safestring import mark_safe
+from django.utils.html import strip_tags
 from django.core.urlresolvers import NoReverseMatch, reverse
 from django.utils.translation import ugettext_lazy as _
 
@@ -85,6 +91,16 @@ class SearchResultWrapper(object):
         except NoReverseMatch:
             return None
 
+    def get_stored_fields(self):
+        stored_fields = {}
+        for key, value in self.object.get_stored_fields().items():
+            safe_value = force_text(value).strip()
+            stored_fields[key] = {
+                'raw': safe_value,
+                'safe': mark_safe(strip_tags(safe_value))
+            }
+        return stored_fields
+
     def get_additional_fields(self):
         """Find all fields in the Haystack SearchResult which have not already
         appeared in the stored fields.
@@ -95,7 +111,11 @@ class SearchResultWrapper(object):
         stored_fields = self.get_stored_fields().keys()
         for key, value in self.object.get_additional_fields().items():
             if key not in stored_fields:
-                additional_fields[key] = value
+                safe_value = force_text(value).strip()
+                additional_fields[key] = {
+                    'raw': safe_value,
+                    'safe': mark_safe(strip_tags(safe_value))
+                }
         return additional_fields
 
     def get_content_field(self):

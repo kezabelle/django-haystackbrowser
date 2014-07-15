@@ -14,11 +14,17 @@
                 <a href="http://django-haystack.readthedocs.org/en/latest/searchfield_api.html#stored">See here</a> for an explanation of what 'Stored' means
             </div>
             {% for key, value in original.get_stored_fields.items %}
-                <div class="form-row field-{{ key }}">
-                    <label for="{{ key }}">{{ key }}</label>
-                    <p id="{{ key }}">{{ value|striptags|safe }}</p>
+                <div class="form-row form-row-preview field-{{ key }} {% if value.raw != value.safe %}form-row-preview-differs{% endif %}">
+                    <label for="field-{{ key }}">{{ key }}</label>
+                    {% if value.raw != value.safe %}
+                    <p id="field-{{ key }}" class="raw">{{ value.raw }} &nbsp;</p>
+                    <p id="field-{{ key }}-safe" class="safe">{{ value.safe }} &nbsp;</p>
+                    <p class="help">{% trans "This field has been sanitised for display; hover to view the raw data" %}</p>
+                    {% else %}
+                    <p id="field-{{ key }}">{{ value.raw }} &nbsp;</p>
+                    {% endif %}
                     {% if key == original.get_content_field %}
-                        <p class="help">{% trans "this field supplies the primary document to be indexed" %}</p>
+                        <p class="help">{% trans "This field supplies the primary document to be indexed" %}</p>
                     {% endif %}
                 </div>
             {% empty %}
@@ -39,9 +45,15 @@
                 Data returned from the <a href="http://django-haystack.readthedocs.org/en/latest/searchresult_api.html#get-additional-fields">Search Result's additional_fields</a>.
             </div>
             {% for key, value in original.get_additional_fields.items %}
-                <div class="form-row">
-                    <label for="{{ key }}">{{ key }}</label>
-                    <p id="{{ key }}">{{ value|striptags|safe }}</p>
+                <div class="form-row form-row-preview field-additional-{{ key }} {% if value.raw != value.safe %}form-row-preview-differs{% endif %}">
+                    <label for="field-additional-{{ key }}">{{ key }}</label>
+                    {% if value.raw != value.safe %}
+                    <p id="field-additional-{{ key }}" class="raw">{{ value.raw }} &nbsp;</p>
+                    <p id="field-additional-{{ key }}-safe" class="safe">{{ value.safe }} &nbsp;</p>
+                    <p class="help">{% trans "This field has been sanitised for display; hover to view the raw data" %}</p>
+                    {% else %}
+                    <p id="field-additional-{{ key }}">{{ value.safe }} &nbsp;</p>
+                    {% endif %}
                 </div>
             {% empty %}
                 <div class="form-row errors">
