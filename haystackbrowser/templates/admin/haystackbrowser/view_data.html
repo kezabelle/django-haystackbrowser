@@ -16,7 +16,7 @@
             {% for key, value in original.get_stored_fields.items %}
                 <div class="form-row field-{{ key }}">
                     <label for="{{ key }}">{{ key }}</label>
-                    <p id="{{ key }}">{{ value }}</p>
+                    <p id="{{ key }}">{{ value|striptags|safe }}</p>
                     {% if key == original.get_content_field %}
                         <p class="help">{% trans "this field supplies the primary document to be indexed" %}</p>
                     {% endif %}
@@ -41,7 +41,7 @@
             {% for key, value in original.get_additional_fields.items %}
                 <div class="form-row">
                     <label for="{{ key }}">{{ key }}</label>
-                    <p id="{{ key }}">{{ value }}</p>
+                    <p id="{{ key }}">{{ value|striptags|safe }}</p>
                 </div>
             {% empty %}
                 <div class="form-row errors">
