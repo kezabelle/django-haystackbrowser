@@ -36,7 +36,7 @@ Why I wrote it
 I love `Haystack`_ but I'm sometimes not sure what data I have in it. When a
 query isn't producing the result I'd expect, debugging it traditionally involves
 using the Python `REPL to inspect the SearchQuerySet`_, and while I'm not allergic
-to doing that, it can be inconvinient, and doesn't scale well when you need to
+to doing that, it can be inconvenient, and doesn't scale well when you need to
 make multiple changes.
 
 This application, a minor abuse of the `Django administration`_, aims to solve that
