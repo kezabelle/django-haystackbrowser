@@ -353,11 +353,21 @@ class HaystackResultsAdmin(object):
         """
         query = {DJANGO_ID: pk, DJANGO_CT: content_type}
         try:
-            sqs = self.get_wrapped_search_results(SearchQuerySet().filter(**query)[:1])[0]
-            more_like_this = self.get_wrapped_search_results(SearchQuerySet().more_like_this(sqs.object.object)[:5])
+            raw_sqs = SearchQuerySet().filter(**query)[:1]
+            wrapped_sqs = self.get_wrapped_search_results(raw_sqs)
+            sqs = wrapped_sqs[0]
         except IndexError:
             raise Search404("Search result using query {q!r} does not exist".format(
                 q=query))
+
+        more_like_this = ()
+        # the model may no longer be in the database, instead being only backed
+        # by the search backend.
+        model_instance = sqs.object.object
+        if model_instance is not None:
+            raw_mlt = SearchQuerySet().more_like_this(model_instance)[:5]
+            more_like_this = self.get_wrapped_search_results(raw_mlt)
+
         context = {
             'original': sqs,
             'title': _('View stored data for this %s') % force_text(sqs.verbose_name),
