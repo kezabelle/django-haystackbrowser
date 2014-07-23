@@ -49,11 +49,15 @@
             <script type="text/javascript">document.getElementById("{{ form.q.id_for_label }}").focus();</script>
 
             <h3>{% trans "Only models" %}</h3>
-            {{ form.models }}
+            <div class="haystackbrowser-models-list">
+                {{ form.models }}
+            </div>
 
             {% if form.possible_facets.field.choices|length > 0 %}
             <h3>{% trans "Finding facets on" %}</h3>
-            {{ form.possible_facets }}
+            <div class="haystackbrowser-possible-facets-list">
+                {{ form.possible_facets }}
+            </div>
             {% endif %}
             </form>
             {% if search_model_count != form.models.field.choices|length or request.GET.q or search_facet_count > 0 %}
