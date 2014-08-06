@@ -21,7 +21,7 @@
     {{ result.pk }}
     {% endif %}
 </td>
-{% if filtered %}<td>{{ result.score }}</td>{% endif %}
+{% if filtered %}<td><span title="{{ result.score }}">{{ result.score|floatformat:"-3" }}</span></td>{% endif %}
 <td>{{ result.get_content_field }}</td>
 
 <td>
