@@ -157,12 +157,12 @@ class HaystackResultsAdmin(object):
 
         return patterns('',
             url(regex=r'^(?P<content_type>.+)/(?P<pk>.+)/$',
-                view=self.view,
+                view=wrap(self.view),
                 name='%s_%s_change' % (self.model._meta.app_label,
                     self.model._meta.module_name)
             ),
             url(regex=r'^$',
-                view=self.index,
+                view=wrap(self.index),
                 name='%s_%s_changelist' % (self.model._meta.app_label,
                     self.model._meta.module_name)
             ),
@@ -258,6 +258,9 @@ class HaystackResultsAdmin(object):
 
         :return: A template rendered into an HttpReponse
         """
+        if not self.has_change_permission(request, None):
+            raise PermissionDenied
+
         page_var = self.get_paginator_var(request)
         form = PreSelectedModelSearchForm(request.GET or None, load_all=False)
 
@@ -351,6 +354,9 @@ class HaystackResultsAdmin(object):
 
         :return: A template rendered into an HttpReponse
         """
+        if not self.has_change_permission(request, None):
+            raise PermissionDenied
+        
         query = {DJANGO_ID: pk, DJANGO_CT: content_type}
         try:
             raw_sqs = SearchQuerySet().filter(**query)[:1]
