@@ -21,7 +21,7 @@
                     <p id="field-{{ key }}-safe" class="safe">{{ value.safe }} &nbsp;</p>
                     <p class="help">{% trans "This field has been sanitised for display; hover to view the raw data" %}</p>
                     {% else %}
-                    <p id="field-{{ key }}">{{ value.raw }} &nbsp;</p>
+                    <p id="field-{{ key }}">{{ value.safe }} &nbsp;</p>
                     {% endif %}
                     {% if key == original.get_content_field %}
                         <p class="help">{% trans "This field supplies the primary document to be indexed" %}</p>
