@@ -43,6 +43,17 @@ class SearchResultWrapper(object):
             from haystack import site
             self.object.searchindex = site.get_index(self.object.model)
 
+
+    def __repr__(self):
+        return '<%(module)s.%(cls)s [%(app)s.%(model)s pk=%(pk)r]>' % {
+            'module': self.__class__.__module__,
+            'cls': self.__class__.__name__,
+            'obj': self.object,
+            'app': self.object.app_label,
+            'model': self.object.model_name,
+            'pk': self.object.pk,
+        }
+
     def get_app_url(self):
         """Resolves a given object's app into a link to the app administration.
 
