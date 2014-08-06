@@ -15,7 +15,7 @@
             </div>
             {% for key, value in original.get_stored_fields.items %}
                 <div class="form-row form-row-preview field-{{ key }} {% if value.raw != value.safe %}form-row-preview-differs{% endif %}">
-                    <label for="field-{{ key }}">{{ key }}</label>
+                    <label for="field-{{ key }}" {% if value.model_attr %}title="{{ value.model_attr }}"{% endif %}>{{ key }}</label>
                     {% if value.raw != value.safe %}
                     <p id="field-{{ key }}" class="raw">{{ value.raw }} &nbsp;</p>
                     <p id="field-{{ key }}-safe" class="safe">{{ value.safe }} &nbsp;</p>

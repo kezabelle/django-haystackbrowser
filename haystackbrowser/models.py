@@ -102,14 +102,30 @@ class SearchResultWrapper(object):
         except NoReverseMatch:
             return None
 
+    def get_model_attrs(self):
+        outfields = {}
+        try:
+            fields = self.object.searchindex.fields
+        except:
+            fields = {}
+        else:
+            for key, field in fields.items():
+                has_model_attr = getattr(field, 'model_attr', None)
+                if has_model_attr is not None:
+                    outfields[key] = force_text(has_model_attr)
+        return outfields
+
     def get_stored_fields(self):
         stored_fields = {}
+        model_attrs = self.get_model_attrs()
         for key, value in self.object.get_stored_fields().items():
             safe_value = force_text(value).strip()
             stored_fields[key] = {
                 'raw': safe_value,
                 'safe': mark_safe(strip_tags(safe_value))
             }
+            if key in model_attrs:
+                stored_fields[key].update(model_attr=model_attrs.get(key))
         return stored_fields
 
     def get_additional_fields(self):
@@ -120,6 +136,7 @@ class SearchResultWrapper(object):
         """
         additional_fields = {}
         stored_fields = self.get_stored_fields().keys()
+        model_attrs = self.get_model_attrs()
         for key, value in self.object.get_additional_fields().items():
             if key not in stored_fields:
                 safe_value = force_text(value).strip()
@@ -127,6 +144,8 @@ class SearchResultWrapper(object):
                     'raw': safe_value,
                     'safe': mark_safe(strip_tags(safe_value))
                 }
+                if key in model_attrs:
+                    additional_fields[key].update(model_attr=model_attrs.get(key))
         return additional_fields
 
     def get_content_field(self):
