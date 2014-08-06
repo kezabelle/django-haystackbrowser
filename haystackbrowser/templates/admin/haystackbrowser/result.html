@@ -28,7 +28,7 @@
     {% if request.GET.q %}
         {% highlight result.get_content with request.GET.q html_tag "strong" max_length 500 %}
     {% else %}
-        {{ result.get_content|striptags|safe|truncatewords:20 }}
+        {{ result.get_content|striptags|safe|truncatechars:500 }}
     {% endif %}
     </td>
 <td>
