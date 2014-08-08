@@ -12,6 +12,7 @@
 .. _FreeBSD: http://en.wikipedia.org/wiki/BSD_licenses#2-clause_license_.28.22Simplified_BSD_License.22_or_.22FreeBSD_License.22.29
 .. _Ben Hastings: https://twitter.com/benjhastings/
 .. _David Novakovic: http://blog.dpn.name/
+.. _Francois Lebel: http://flebel.com/
 .. _Jussi Räsänen: http://skyred.fi/
 .. _REPL to inspect the SearchQuerySet: http://django-haystack.readthedocs.org/en/latest/debugging.html#no-results-found-on-the-web-page
 .. _ticket 21056: https://code.djangoproject.com/ticket/21056
@@ -211,6 +212,7 @@ The following people have been of help, in some capacity.
    me to stop it blowing up uncontrollably.
  * `David Novakovic`_, for getting it to at least work under **Grappelli**, and
    fixing an omission in the setup script.
+ * `Francois Lebel`_, for various fixes.
  * `Jussi Räsänen`_, for various fixes.
 
 TODO
