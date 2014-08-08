@@ -16,6 +16,7 @@
 .. _Jussi Räsänen: http://skyred.fi/
 .. _REPL to inspect the SearchQuerySet: http://django-haystack.readthedocs.org/en/latest/debugging.html#no-results-found-on-the-web-page
 .. _ticket 21056: https://code.djangoproject.com/ticket/21056
+.. _tagged on GitHub: https://github.com/kezabelle/django-haystackbrowser/tags
 
 .. title:: About
 
@@ -70,7 +71,8 @@ The default landing page, the list view, shows the following fields:
   * The *score* for the current query, as returned by `Haystack`_ - when no
     query is given, the default score of **1.0** is used;
   * The primary content field for each result;
-  * The first few words of that primary content field.
+  * The first few words of that primary content field, or a relevant snippet
+    with highlights, if searching by keywords.
 
 It also allows you to perform searches against the index, optionally filtering
 by specific models or faceted fields. That's functionality `Haystack`_ provides
@@ -89,6 +91,8 @@ up the stored data view, which is the most useful part of it.
   * Highlights which of the stored fields is the primary content field
     (usually, ``text``);
   * Shows all additional fields;
+  * Strips any HTML tags present in the raw data when displaying, with an
+    option to display raw data on hover.
   * Shows any `Haystack`_ specific settings in the settings module.
   * Shows up to **5** similar objects, if the backend supports it.
 
@@ -103,7 +107,7 @@ Requirements and dependencies
 django-haystackbrowser should hopefully run on:
 
   * **Django 1.3.1** or higher;
-  * **Haystack 1.2** or higher (including **2.0**!)
+  * **Haystack 1.2** or higher (including **2.x**!)
 
 It additionally depends on ``django-classy-tags``, though only to use the provided
 template tags, which are entirely optional.
@@ -121,16 +125,22 @@ Using pip
 
 The best way to grab the package is using ``pip`` to install via ``git``::
 
-    pip install git+https://github.com/kezabelle/django-haystackbrowser.git@0.5.0#egg=django-haystackbrowser
+    pip install git+https://github.com/kezabelle/django-haystackbrowser.git#egg=django-haystackbrowser
 
 Any missing dependencies will be resolved by ``pip`` automatically.
+
+If you want the last release (0.5.0), such as it is, you can do::
+
+    pip install git+https://github.com/kezabelle/django-haystackbrowser.git@0.5.0#egg=django-haystackbrowser
+
+You can find all previous releases `tagged on GitHub`_
 
 Using git directly
 ^^^^^^^^^^^^^^^^^^
 
-If you're into living on the edge, or don't use ``pip``, you can get the latest version::
+If you're not using ``pip``, you can get the latest version::
 
-    git clone git@github.com:kezabelle/django-haystackbrowser.git
+    git clone https://github.com/kezabelle/django-haystackbrowser.git
 
 and then make sure the ``haystackbrowser`` package is on your python path.
 
