@@ -33,7 +33,7 @@
     </td>
 <td>
     {% if result.get_detail_url %}
-    <a href="{{ result.get_detail_url }}?{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.connection %}&connection={{ request.GET.connection }}{% endif %}">
+    <a href="{{ result.get_detail_url }}{% if search_form %}?{{ search_form.cleaned_data_querydict.urlencode }}{% endif %}">
         {% trans 'View stored data' %}
     </a>
     {% else %}

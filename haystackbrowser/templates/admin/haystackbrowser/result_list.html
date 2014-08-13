@@ -26,8 +26,32 @@
 
 {% block content %}
 <div id="content-main">
+    {% if form.errors %}
+    <ul class="errors">
+        {% for error in form.non_field_errors %}
+        <li>{{ error}}</li>
+        {% endfor %}
+        {% for field in form %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                <li>{{ field.label_tag }} - {{ error }}</li>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
     <div class="module {% if filtered %}filtered{% endif %}" id="changelist">
-            {% block search %}{% endblock search %}
+        {% block search %}{% endblock search %}
+        {% if applied_facets %}
+        <div class="xfull">
+        <ul class="toplinks">
+        <li class="date-back">{% trans "Applied facets" %}:</li>
+        {% for choice in applied_facets %}
+        <li> {% if choice.link %}<a href="{{ choice.link }}">{% endif %}{{ choice.title }}{% if choice.link %}</a>{% endif %} <a href="{{ choice.remove_link }}" class="deletelink">&nbsp;</a></li>
+        {% endfor %}
+        </ul><br class="clear" />
+        </div>
+        {% endif %}
 
         {% block filters %}
         <div id="changelist-filter">
@@ -48,13 +72,13 @@
             </div>
             <script type="text/javascript">document.getElementById("{{ form.q.id_for_label }}").focus();</script>
 
-            <h3>{% trans "Only models" %}</h3>
+            <h3>{{ form.models.label }}</h3>
             <div class="haystackbrowser-models-list">
                 {{ form.models }}
             </div>
 
             {% if form.possible_facets.field.choices|length > 0 %}
-            <h3>{% trans "Finding facets on" %}</h3>
+            <h3>{{ form.possible_facets.label }}</h3>
             <div class="haystackbrowser-possible-facets-list">
                 {{ form.possible_facets }}
             </div>
@@ -74,14 +98,12 @@
 
             {% if facets and form.possible_facets.field.choices|length > 0 %}
             <h2>{% trans "Facets & counts" %}</h2>
-
-            {% regroup facets.get_field_facets|dictsort:"field" by field as facet_list %}
-            {% for facet_type in facet_list %}
-                <h3>{{ facet_type.grouper }}</h3>
+            {% for facet_type in facets.get_field_facets %}
+                <h3>{{ facet_type.grouper.get_display }}</h3>
                 <ul>
                     {% for item in facet_type.list %}
                       <li>
-                          <a href="{{ request.get_full_path }}&amp;selected_facets={{ facet_type.grouper }}:{{ item.value|urlencode }}">
+                          <a href="{{ item.facet.link }}{% if item.fieldvalue not in item.facet.link %}&amp;selected_facets={{ item.fieldvalue }}{% endif %}">
                               {{ item.value }}</a>&nbsp;({{ item.count }})
                       </li>
                     {% endfor %}
@@ -105,7 +127,7 @@
             <tbody>
                 {% for result in results %}
                 <tr class="{% cycle 'row1' 'row2' %}">
-                    {% include "admin/haystackbrowser/result.html" with result=result request=request filtered=filtered only %}
+                    {% include "admin/haystackbrowser/result.html" with result=result request=request filtered=filtered search_form=form only %}
                 </tr>
                 {% endfor %}
             </tbody>
