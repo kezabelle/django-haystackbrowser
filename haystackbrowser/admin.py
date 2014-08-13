@@ -3,7 +3,7 @@ try:
     from django.utils.encoding import force_text
 except ImportError:  # < Django 1.5
     from django.utils.encoding import force_unicode as force_text
-from django.utils.translation import ugettext_lazy as _, string_concat
+from django.utils.translation import ugettext_lazy as _
 from django.http import Http404, HttpResponseRedirect
 try:
     from functools import update_wrapper
@@ -40,7 +40,7 @@ def get_query_string(query_params, new_params=None, remove=None):
     params = query_params.copy()
     for r in remove:
         for k in list(params):
-            if k.startswith(r):
+            if k == r:
                 del params[k]
     for k, v in new_params.items():
         if v is None:
@@ -66,6 +66,14 @@ class FakeChangeListForPaginator(object):
     def get_query_string(self, a_dict):
         """ Method to return a querystring appropriate for pagination."""
         return get_query_string(self.request.GET, a_dict)
+
+    def __repr__(self):
+        return '<%(module)s.%(cls)s page=%(page)d total=%(count)d>' % {
+            'module': self.__class__.__module__,
+            'cls': self.__class__.__name__,
+            'page': self.page_num,
+            'count': self.result_count,
+        }
 
 
 class Search404(Http404):
@@ -226,7 +234,7 @@ class HaystackResultsAdmin(object):
         :return: list of items wrapped with whatever :py:meth:`~haystackbrowser.admin.HaystackResultsAdmin.get_searchresult_wrapper` provides.
         """
         klass = self.get_searchresult_wrapper()
-        return [klass(x, self.admin_site.name) for x in object_list]
+        return tuple(klass(x, self.admin_site.name) for x in object_list)
 
     def get_current_query_string(self, request, add=None, remove=None):
         """ Method to return a querystring with modified parameters.
@@ -263,7 +271,7 @@ class HaystackResultsAdmin(object):
 
         page_var = self.get_paginator_var(request)
         form = PreSelectedModelSearchForm(request.GET or None, load_all=False)
-
+        minimum_page = form.fields[page_var].min_value
         # Make sure there are some models indexed
         available_models = model_choices()
         if len(available_models) <= 0:
@@ -282,18 +290,26 @@ class HaystackResultsAdmin(object):
             if form.has_multiple_connections():
                 new_qs.append('&connection=' + form.fields['connection'].initial)
             new_qs = ''.join(new_qs)
-            qs = self.get_current_query_string(request, remove=['p'])
-            return HttpResponseRedirect(request.path_info + qs + new_qs)
+            existing_query = request.GET.copy()
+            if page_var in existing_query:
+                existing_query.pop(page_var)
+            existing_query[page_var] = minimum_page
+            location = '%(path)s?%(existing_qs)s%(new_qs)s' % {
+                'existing_qs': existing_query.urlencode(),
+                'new_qs': new_qs,
+                'path': request.path_info,
+            }
+            return HttpResponseRedirect(location)
 
+        sqs = form.search()
+        cleaned_GET = form.cleaned_data_querydict
         try:
-            sqs = form.search()
-            try:
-                page_no = int(request.GET.get(PAGE_VAR, 0))
-            except ValueError:
-                page_no = 0
-            #page_no = int(request.GET.get(page_var, 1))
-            results_per_page = self.get_results_per_page(request)
-            paginator = Paginator(sqs, results_per_page)
+            page_no = int(cleaned_GET.get(PAGE_VAR, minimum_page))
+        except ValueError:
+            page_no = minimum_page
+        results_per_page = self.get_results_per_page(request)
+        paginator = Paginator(sqs, results_per_page)
+        try:
             page = paginator.page(page_no+1)
         except (InvalidPage, ValueError):
             # paginator.page may raise InvalidPage if we've gone too far
@@ -304,11 +320,10 @@ class HaystackResultsAdmin(object):
         query = request.GET.get(self.get_search_var(request), None)
         connection = request.GET.get('connection', None)
         title = self.model._meta.verbose_name_plural
-        if query:
-            title = string_concat(self.model._meta.verbose_name_plural, ' for "',
-                                  query, '"')
-        if connection:
-            title = string_concat(title, ' using "', connection, '" connection')
+
+        wrapped_facets = FacetWrapper(
+            sqs.facet_counts(), querydict=form.cleaned_data_querydict.copy())
+
         context = {
             'results': self.get_wrapped_search_results(page.object_list),
             'pagination_required': page.has_other_pages(),
@@ -324,12 +339,14 @@ class HaystackResultsAdmin(object):
             'app_label': self.model._meta.app_label,
             'filtered': True,
             'form': form,
-            'query_string': self.get_current_query_string(request, remove=['p']),
-            'search_model_count': len(request.GET.getlist('models')),
-            'search_facet_count': len(request.GET.getlist('possible_facets')),
+            'form_valid': form.is_valid(),
+            'query_string': self.get_current_query_string(request, remove=[page_var]),
+            'search_model_count': len(cleaned_GET.getlist('models')),
+            'search_facet_count': len(cleaned_GET.getlist('possible_facets')),
             'search_var': self.get_search_var(request),
             'page_var': page_var,
-            'facets': FacetWrapper(sqs.facet_counts()),
+            'facets': wrapped_facets,
+            'applied_facets': form.applied_facets(),
             'module_name': force_text(self.model._meta.verbose_name_plural),
             'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta),
             'haystack_version': _haystack_version,
@@ -356,7 +373,7 @@ class HaystackResultsAdmin(object):
         """
         if not self.has_change_permission(request, None):
             raise PermissionDenied
-        
+
         query = {DJANGO_ID: pk, DJANGO_CT: content_type}
         try:
             raw_sqs = SearchQuerySet().filter(**query)[:1]
@@ -374,6 +391,9 @@ class HaystackResultsAdmin(object):
             raw_mlt = SearchQuerySet().more_like_this(model_instance)[:5]
             more_like_this = self.get_wrapped_search_results(raw_mlt)
 
+        form = PreSelectedModelSearchForm(request.GET or None, load_all=False)
+        form_valid = form.is_valid()
+
         context = {
             'original': sqs,
             'title': _('View stored data for this %s') % force_text(sqs.verbose_name),
@@ -383,6 +403,8 @@ class HaystackResultsAdmin(object):
             'has_change_permission': self.has_change_permission(request, sqs),
             'similar_objects': more_like_this,
             'haystack_version': _haystack_version,
+            'form': form,
+            'form_valid': form_valid,
         }
         return render_to_response('admin/haystackbrowser/view.html', context,
                                   context_instance=RequestContext(request))
