@@ -43,6 +43,10 @@
      <a href="../../">
          {{ module_name|capfirst }}
      </a>
+     {% if form_valid %}
+     &rsaquo;
+    <a href="../../?{{ form.cleaned_data_querydict.urlencode }}">{% trans "Previous results" %}</a>
+     {% endif %}
      {% if request.GET.q %}
      &rsaquo;
      <a href="../../?q={{ request.GET.q }}">{% blocktrans with request.GET.q as query %}matching "{{ query }}"{% endblocktrans %}</a>
