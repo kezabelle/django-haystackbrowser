@@ -108,6 +108,11 @@ class HaystackResultsAdmin(object):
     def validate(cls, *args, **kwargs):
         return
 
+    @staticmethod
+    def check(model, *args, **kwargs):
+        """ it's not a real modeladmin, so we need this attribute in DEBUG. """
+        return ()
+
     def get_model_perms(self, request):
         return {
             'add': self.has_add_permission(request),
