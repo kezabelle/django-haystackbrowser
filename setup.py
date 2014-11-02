@@ -29,7 +29,7 @@ PACKAGES = find_packages()
 
 setup(
     name='django-haystackbrowser',
-    version='0.5.1',
+    version='0.6.0',
     description=SHORT_DESC,
     author='Keryn Knight',
     author_email='python-package@kerynknight.com',
