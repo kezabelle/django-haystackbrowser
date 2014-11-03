@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 from copy import deepcopy
-from urllib import quote_plus
+try:
+    from urllib import quote_plus
+except ImportError:  # > Python 3
+    from django.utils.six.moves.urllib import parse
+    quote_plus = parse.quote_plus
 from operator import itemgetter
 from itertools import groupby
 from collections import namedtuple
