@@ -168,16 +168,21 @@ class HaystackResultsAdmin(object):
                 return self.admin_site.admin_view(view)(*args, **kwargs)
             return update_wrapper(wrapper, view)
 
+        if hasattr(self.model._meta, 'model_name'):
+            model_key = self.model._meta.model_name
+        else:
+            model_key = self.model._meta.module_name
+
         return patterns('',
             url(regex=r'^(?P<content_type>.+)/(?P<pk>.+)/$',
                 view=wrap(self.view),
                 name='%s_%s_change' % (self.model._meta.app_label,
-                    self.model._meta.module_name)
+                                       model_key)
             ),
             url(regex=r'^$',
                 view=wrap(self.index),
                 name='%s_%s_changelist' % (self.model._meta.app_label,
-                    self.model._meta.module_name)
+                                           model_key)
             ),
         )
     urls = property(urls)
