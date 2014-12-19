@@ -120,6 +120,9 @@ class HaystackResultsAdmin(object):
             'delete': self.has_delete_permission(request)
         }
 
+    def has_module_permission(self, request):
+        return any(self.get_model_perms(request=request).values())
+
     def has_add_permission(self, request):
         """Emulates the equivalent Django ModelAdmin method.
         :param request: the current request.
