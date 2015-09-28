@@ -7,9 +7,9 @@ from django.forms import (MultipleChoiceField, CheckboxSelectMultiple,
                           ChoiceField, HiddenInput, IntegerField)
 from django.utils.translation import ugettext_lazy as _
 try:
-    from django.forms.util import ErrorDict
-except ImportError: # > Django 1.9
     from django.forms.utils import ErrorDict
+except ImportError: # < Django 1.8
+    from django.forms.util import ErrorDict
 try:
     from django.utils.encoding import force_text
 except ImportError:  # < Django 1.5
