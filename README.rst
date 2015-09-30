@@ -224,6 +224,7 @@ The following people have been of help, in some capacity.
    fixing an omission in the setup script.
  * `Francois Lebel`_, for various fixes.
  * `Jussi Räsänen`_, for various fixes.
+ * Vadim Markovtsev, for minor fix related to Django 1.8+.
 
 TODO
 ----
