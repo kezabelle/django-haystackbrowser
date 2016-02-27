@@ -4,3 +4,5 @@ haystackbrowser/panels.py
 dist
 django_haystackbrowser.egg-info
 *.pickle
+.eggs
+db.sqlite3

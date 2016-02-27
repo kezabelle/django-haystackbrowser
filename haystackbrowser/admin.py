@@ -1,4 +1,6 @@
 from django.core.paginator import Paginator, InvalidPage
+from haystack.exceptions import SearchBackendError
+
 try:
     from django.utils.encoding import force_text
 except ImportError:  # < Django 1.5
@@ -385,7 +387,7 @@ class HaystackResultsAdmin(object):
         :return: A template rendered into an HttpReponse
         """
         if not self.has_change_permission(request, None):
-            raise PermissionDenied
+            raise PermissionDenied("Not a superuser")
 
         query = {DJANGO_ID: pk, DJANGO_CT: content_type}
         try:
@@ -395,6 +397,9 @@ class HaystackResultsAdmin(object):
         except IndexError:
             raise Search404("Search result using query {q!r} does not exist".format(
                 q=query))
+        except SearchBackendError as e:
+            raise Search404("{exc!r} while trying query {q!r}".format(
+                q=query, exc=e))
 
         more_like_this = ()
         # the model may no longer be in the database, instead being only backed

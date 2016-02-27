@@ -1,15 +1,42 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
 
+
+class PyTest(TestCommand):
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.pytest_args = []
+
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        # import here, cause outside the eggs aren't loaded
+        import pytest
+        errno = pytest.main(self.pytest_args)
+        sys.exit(errno)
+
+
+
+def make_readme(root_path):
+    consider_files = ('README.rst', 'LICENSE', 'CHANGELOG', 'CONTRIBUTORS')
+    for filename in consider_files:
+        filepath = os.path.realpath(os.path.join(root_path, filename))
+        if os.path.isfile(filepath):
+            with open(filepath, mode='r') as f:
+                yield f.read()
+
+
+HERE = os.path.abspath(os.path.dirname(__file__))
 SHORT_DESC = """A reusable Django application for viewing and debugging
 all the data that has been pushed into Haystack"""
+LONG_DESCRIPTION = "\r\n\r\n----\r\n\r\n".join(make_readme(HERE))
 
-REQUIREMENTS = [
-    'Django>=1.2.0',
-    'django-haystack>=1.2.0',
-    'django-classy-tags>=0.3.4.1',
-]
 
 TROVE_CLASSIFIERS = [
     'Development Status :: 3 - Alpha',
@@ -38,7 +65,19 @@ setup(
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
     url='https://github.com/kezabelle/django-haystackbrowser/tree/master',
     packages=PACKAGES,
-    install_requires=REQUIREMENTS,
+    install_requires=[
+        'Django>=1.3.1',
+        'django-haystack>=1.2.0',
+        'django-classy-tags>=0.3.4.1',
+    ],
+    tests_require=[
+        'django-haystack>=1.2.0',
+        'pytest>=2.6.4',
+        'pytest-cov>=1.8.1',
+        'pytest-django>=2.8.0',
+        'pytest-remove-stale-bytecode>=1.0',
+    ],
+    cmdclass={'test': PyTest},
     classifiers=TROVE_CLASSIFIERS,
     platforms=['OS Independent'],
     package_data={'': [
