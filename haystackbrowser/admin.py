@@ -111,7 +111,7 @@ class HaystackResultsAdmin(object):
         return
 
     @staticmethod
-    def check(model, *args, **kwargs):
+    def check(*args, **kwargs):
         """ it's not a real modeladmin, so we need this attribute in DEBUG. """
         return ()
 
