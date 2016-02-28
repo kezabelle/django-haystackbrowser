@@ -6,3 +6,4 @@ django_haystackbrowser.egg-info
 *.pickle
 .eggs
 db.sqlite3
+.tox

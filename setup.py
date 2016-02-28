@@ -22,6 +22,25 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
+class Tox(TestCommand):
+    user_options = [('tox-args=', 'a', "Arguments to pass to tox")]
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.tox_args = None
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+    def run_tests(self):
+        #import here, cause outside the eggs aren't loaded
+        import tox
+        import shlex
+        args = self.tox_args
+        if args:
+            args = shlex.split(self.tox_args)
+        errno = tox.cmdline(args=args)
+        sys.exit(errno)
+
 
 def make_readme(root_path):
     consider_files = ('README.rst', 'LICENSE', 'CHANGELOG', 'CONTRIBUTORS')
@@ -77,7 +96,7 @@ setup(
         'pytest-django>=2.8.0',
         'pytest-remove-stale-bytecode>=1.0',
     ],
-    cmdclass={'test': PyTest},
+    cmdclass={'test': PyTest, 'tox': Tox},
     classifiers=TROVE_CLASSIFIERS,
     platforms=['OS Independent'],
     package_data={'': [

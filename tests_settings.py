@@ -62,9 +62,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'tests_media')
 TEMPLATE_DIRS = ()
 USE_TZ = True
 
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
-    },
-}
+
+OLD_HAYSTACK = bool(int(os.getenv('OLD_HAYSTACK')))
+
+if OLD_HAYSTACK is True:
+    HAYSTACK_SITECONF = 'tests_search_sites'
+    HAYSTACK_SEARCH_ENGINE = 'whoosh'
+    HAYSTACK_WHOOSH_PATH = os.path.join(BASE_DIR, 'whoosh_lt25_index')
+else:
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+            'PATH': os.path.join(BASE_DIR, 'whoosh_gt25_index'),
+        },
+    }
