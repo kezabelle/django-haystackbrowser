@@ -7,3 +7,4 @@ django_haystackbrowser.egg-info
 .eggs
 db.sqlite3
 .tox
+htmlcov/

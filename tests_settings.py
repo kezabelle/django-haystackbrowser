@@ -63,7 +63,7 @@ TEMPLATE_DIRS = ()
 USE_TZ = True
 
 
-OLD_HAYSTACK = bool(int(os.getenv('OLD_HAYSTACK')))
+OLD_HAYSTACK = bool(int(os.getenv('OLD_HAYSTACK', '0')))
 
 if OLD_HAYSTACK is True:
     HAYSTACK_SITECONF = 'tests_search_sites'

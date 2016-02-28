@@ -1,6 +1,8 @@
 include LICENSE
 include README.rst
+include tox.ini
+include Makefile
 global-include *.rst *.py *.html
-global-exclude *.pyc *.pyo *.sw? *.sh
 recursive-include docs Makefile
+recursive-exclude htmlcov *.html
 prune docs/_build
