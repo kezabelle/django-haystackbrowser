@@ -75,4 +75,8 @@ else:
             'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
             'PATH': os.path.join(BASE_DIR, 'whoosh_gt25_index'),
         },
+        'other': {
+            'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+            'PATH': os.path.join(BASE_DIR, 'whoosh_gt25_index'),
+        },
     }
