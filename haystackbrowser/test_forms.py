@@ -4,7 +4,13 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import pytest
 from django.conf import settings
-from django.test import override_settings
+try:
+    from django.test import override_settings
+except ImportError:
+    try:
+        from django.test.utils import override_settings
+    except ImportError:  # Django 1.3.x
+        from .tests_compat import override_settings
 from haystackbrowser.forms import PreSelectedModelSearchForm
 from mock import patch, Mock
 
@@ -81,3 +87,56 @@ def test_configure_faceting_version2_has_data(unified_index):
 def test_configure_faceting_version2_without_data():
     form = PreSelectedModelSearchForm(data={})
     assert form.configure_faceting() == []
+
+
+@skip_new_haystack
+@patch('haystack.sites.SearchSite._field_mapping')
+def test_configure_faceting_version1_has_data(field_mapping):
+    field_mapping.return_value = {'a': {'facet_fieldname': 'A'},
+                                  'b': {'facet_fieldname': 'B'}}
+    form = PreSelectedModelSearchForm(data={})
+    assert form.configure_faceting() == [('A', 'A'), ('B', 'B')]
+
+
+@skip_new_haystack
+@patch('haystack.sites.SearchSite._field_mapping')
+def test_configure_faceting_version1_without_data(field_mapping):
+    field_mapping.return_value = {}
+    form = PreSelectedModelSearchForm(data={})
+    assert form.configure_faceting() == []
+
+
+@skip_new_haystack
+def test_has_multiple_connections_version1():
+    form = PreSelectedModelSearchForm(data={})
+    assert form.has_multiple_connections() is False
+
+
+@skip_old_haystack
+def test_has_multiple_connections_version2():
+    form = PreSelectedModelSearchForm(data={})
+    with override_settings(HAYSTACK_CONNECTIONS={'default': 1, 'other': 2}):
+        assert form.has_multiple_connections() is True
+
+
+@skip_old_haystack
+def test_has_multiple_connections_version2_nope():
+    form = PreSelectedModelSearchForm(data={})
+    with override_settings(HAYSTACK_CONNECTIONS={'default': 1}):
+        assert form.has_multiple_connections() is False
+
+
+@skip_old_haystack
+def test_get_possible_connections_version2():
+    form = PreSelectedModelSearchForm(data={})
+    setting = {
+        'default': {
+            'TITLE': 'lol',
+        },
+        'other': {},
+    }
+    with override_settings(HAYSTACK_CONNECTIONS=setting):
+        assert sorted(form.get_possible_connections()) == [
+            ('default', 'lol'),
+            ('other', 'other'),
+        ]
