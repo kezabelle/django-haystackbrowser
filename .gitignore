@@ -8,3 +8,4 @@ django_haystackbrowser.egg-info
 db.sqlite3
 .tox
 htmlcov/
+django-haystackbrowser-0.*.*

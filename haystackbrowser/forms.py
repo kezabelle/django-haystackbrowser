@@ -1,6 +1,5 @@
 import logging
-from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.core.exceptions import ValidationError
 from django.http import QueryDict
 from django.template.defaultfilters import yesno
 from django.forms import (MultipleChoiceField, CheckboxSelectMultiple,
@@ -10,12 +9,10 @@ try:
     from django.forms.utils import ErrorDict
 except ImportError: # < Django 1.8
     from django.forms.util import ErrorDict
-try:
-    from django.utils.encoding import force_text
-except ImportError:  # < Django 1.5
-    from django.utils.encoding import force_unicode as force_text
 from haystack.forms import ModelSearchForm, model_choices
 from haystackbrowser.models import AppliedFacets, Facet
+from haystackbrowser.utils import HaystackConfig
+
 
 logger = logging.getLogger(__name__)
 
@@ -59,9 +56,9 @@ class PreSelectedModelSearchForm(ModelSearchForm):
         if 'models' in self.fields:
             self.fields['models'].initial = [x[0] for x in model_choices()]
             self.fields['models'].label = _("Only models")
+        self.haystack_config = HaystackConfig()
 
-        # provide support for discovering the version installed.
-        self.version = self.guess_haystack_version()
+        self.version = self.haystack_config.version
         if self.should_allow_faceting():
             possible_facets = self.configure_faceting()
             self.fields['possible_facets'].choices = possible_facets
@@ -77,70 +74,26 @@ class PreSelectedModelSearchForm(ModelSearchForm):
             self.fields['connection'].widget = HiddenInput()
 
     def is_haystack1(self):
-        return getattr(settings, 'HAYSTACK_SEARCH_ENGINE', None) is not None
+        return self.haystack_config.is_version_1x()
 
     def is_haystack2(self):
-        return getattr(settings, 'HAYSTACK_CONNECTIONS', None) is not None
+        return self.haystack_config.is_version_2x()
 
     def guess_haystack_version(self):
-        if self.is_haystack1():
-            logger.debug("Guessed Haystack 1.2.x")
-            return 1
-        if self.is_haystack2():
-            logger.debug("Guessed Haystack 2.x")
-            return 2
-        return None
+        return self.haystack_config.version
 
     def has_multiple_connections(self):
-        if self.version == 1:
-            return False
-        elif self.version == 2:
-            engine_2x = getattr(settings, 'HAYSTACK_CONNECTIONS', {})
-            return len(engine_2x) > 1
+        return self.haystack_config.has_multiple_connections()
 
     def get_possible_connections(self):
-        engine_2x = getattr(settings, 'HAYSTACK_CONNECTIONS', {})
-        for engine, values in engine_2x.items():
-            engine_name = force_text(engine)
-            if 'TITLE' in values:
-                title = force_text(values['TITLE'])
-            else:
-                title = engine_name
-            yield (engine_name, title)
+        return self.haystack_config.get_connections()
 
     def configure_faceting(self):
-        if self.version == 2:
-            from haystack import connections
-            facet_fields = connections['default'].get_unified_index()._facet_fieldnames
-            possible_facets = facet_fields.keys()
-        elif self.version == 1:
-            possible_facets = []
-            for k, v in self.searchqueryset.site._field_mapping().items():
-                if v['facet_fieldname'] is not None:
-                    possible_facets.append(v['facet_fieldname'])
+        possible_facets = self.haystack_config.get_facets(sqs=self.searchqueryset)
         return [Facet(x).choices() for x in sorted(possible_facets)]
 
     def should_allow_faceting(self):
-        if self.version == 1:
-            engine_1x = getattr(settings, 'HAYSTACK_SEARCH_ENGINE', None)
-            return engine_1x in ('solr', 'xapian')
-        elif self.version == 2:
-            engine_2x = getattr(settings, 'HAYSTACK_CONNECTIONS', {})
-            try:
-                engine_2xdefault = engine_2x['default']['ENGINE']
-                ok_engines = (
-                    'solr' in engine_2xdefault,
-                    'xapian' in engine_2xdefault,
-                    'elasticsearch' in engine_2xdefault,
-                )
-                return any(ok_engines)
-            except KeyError as e:
-                raise ImproperlyConfigured("I think you're on Haystack 2.x without "
-                                           "a `HAYSTACK_CONNECTIONS` dictionary")
-        # I think this is unreachable, but for safety's sake we're going to
-        # assume that if it got here, we can't know faceting is OK and working
-        # so we'll disable the feature.
-        return False
+        return self.haystack_config.supports_faceting()
 
     def __repr__(self):
         is_valid = self.is_bound and not bool(self._errors)
@@ -153,7 +106,7 @@ class PreSelectedModelSearchForm(ModelSearchForm):
             'conns': yesno(self.has_multiple_connections()),
             'facets': yesno(self.should_allow_faceting()),
             'valid': yesno(is_valid),
-            'version': self.guess_haystack_version(),
+            'version': self.haystack_config.version,
         }
 
     def no_query_found(self):
