@@ -95,7 +95,7 @@ setup(
         'pytest>=2.6.4',
         'pytest-cov>=1.8.1',
         'pytest-django>=2.8.0',
-        'mock>=1.3.0',
+        'pytest-mock>=0.11.0',
         'pytest-remove-stale-bytecode>=1.0',
     ],
     cmdclass={'test': PyTest, 'tox': Tox},

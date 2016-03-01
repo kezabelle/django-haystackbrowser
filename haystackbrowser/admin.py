@@ -1,6 +1,6 @@
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, InvalidPage
 from haystack.exceptions import SearchBackendError
-
 try:
     from django.utils.encoding import force_text
 except ImportError:  # < Django 1.5
@@ -11,7 +11,12 @@ try:
     from functools import update_wrapper
 except ImportError:  # < Django 1.6
     from django.utils.functional import update_wrapper
-from django.shortcuts import render_to_response
+try:
+    from django.template.response import TemplateResponse
+    UPGRADED_RENDER = True
+except ImportError:  # Some old Django, which gets worse renderers
+    from django.shortcuts import render_to_response
+    UPGRADED_RENDER = False
 from django.template import RequestContext
 from django.contrib import admin
 from django.contrib.admin.views.main import PAGE_VAR, SEARCH_VAR
@@ -24,7 +29,6 @@ from haystackbrowser.models import HaystackResults, SearchResultWrapper, FacetWr
 from haystackbrowser.forms import PreSelectedModelSearchForm
 from haystackbrowser.utils import get_haystack_settings
 from django.forms import Media
-
 try:
     from haystack.constants import DJANGO_CT, DJANGO_ID
 except ImportError:  # really old haystack, early in 1.2 series?
@@ -272,6 +276,16 @@ class HaystackResultsAdmin(object):
         """
         return get_haystack_settings()
 
+
+
+    def do_render(self, request, template_name, context):
+        if UPGRADED_RENDER:
+            return TemplateResponse(request=request, template=template_name,
+                                    context=context)
+        else:
+            return render_to_response(template_name=template_name, context=context,
+                                      context_instance=RequestContext(request))
+
     def index(self, request):
         """The view for showing all the results in the Haystack index. Emulates
         the standard Django ChangeList mostly.
@@ -282,7 +296,7 @@ class HaystackResultsAdmin(object):
         :return: A template rendered into an HttpReponse
         """
         if not self.has_change_permission(request, None):
-            raise PermissionDenied
+            raise PermissionDenied("Not a superuser")
 
         page_var = self.get_paginator_var(request)
         form = PreSelectedModelSearchForm(request.GET or None, load_all=False)
@@ -371,8 +385,9 @@ class HaystackResultsAdmin(object):
             # See #1 (https://github.com/kezabelle/django-haystackbrowser/pull/1)
             'media': Media()
         }
-        return render_to_response('admin/haystackbrowser/result_list.html', context,
-                                  context_instance=RequestContext(request))
+        return self.do_render(request=request,
+                              template_name='admin/haystackbrowser/result_list.html',
+                              context=context)
 
     def view(self, request, content_type, pk):
         """The view for showing the results of a single item in the Haystack index.
@@ -424,6 +439,7 @@ class HaystackResultsAdmin(object):
             'form': form,
             'form_valid': form_valid,
         }
-        return render_to_response('admin/haystackbrowser/view.html', context,
-                                  context_instance=RequestContext(request))
+        return self.do_render(request=request,
+                              template_name='admin/haystackbrowser/view.html',
+                              context=context)
 admin.site.register(HaystackResults, HaystackResultsAdmin)
