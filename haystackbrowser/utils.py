@@ -4,6 +4,8 @@ from django.core.management.commands.diffsettings import module_to_dict
 import logging
 from django.core.exceptions import ImproperlyConfigured
 from django.template.defaultfilters import yesno
+from haystack.constants import VALID_FILTERS
+from django.utils.translation import ugettext_lazy as _
 try:
     from django.utils.encoding import force_text
 except ImportError:  # Django < 1.4 didn't have force_text because it predates 1.4-1.5 py3k support
@@ -107,6 +109,24 @@ class HaystackConfig(object):
                     title = engine_name
                 yield (engine_name, title)
         return tuple(consumer())
+
+    def get_valid_filters(self):
+        filters = sorted(VALID_FILTERS)
+        names = {
+            'contains': _('contains'),
+            'exact': _('exact'),
+            'gt': _('greater than'),
+            'gte': _('greater than or equal to'),
+            'lt': _('less than'),
+            'lte': _('less than or equal to'),
+            'in': _('in'),
+            'startswith': _('starts with'),
+            'range': _('range (inclusive)'),
+            'fuzzy': _('similar to (fuzzy)')
+        }
+        return tuple((filter, names[filter])
+                     for filter in filters
+                     if filter in names)
 
 
 def get_haystack_settings():
