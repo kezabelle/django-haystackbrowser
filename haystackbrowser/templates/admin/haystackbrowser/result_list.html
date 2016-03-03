@@ -1,5 +1,6 @@
 {% extends "admin/change_list.html" %}
 {% load i18n admin_list %}
+{% load static %}
 {% if not is_popup %}
   {% block breadcrumbs %}
     <div class="breadcrumbs">
@@ -41,7 +42,26 @@
     </ul>
     {% endif %}
     <div class="module {% if filtered %}filtered{% endif %}" id="changelist">
-        {% block search %}{% endblock search %}
+        {% block search %}
+        <div class="inline-group" id="{{ query_forms.prefix }}-group">
+        {{ query_forms.management_form }}
+        {% for query_form in query_forms %}
+            <div class="inline-related{% if forloop.last %} empty-form {% endif %}" id="{{ query_forms.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
+            {{ query_form.as_ul }}
+            </div>
+        {% endfor %}
+        </div>
+        <script type="text/javascript">
+(function($) {
+  $("#{{ query_forms.prefix }}-group .inline-related").stackedFormset({
+    prefix: '{{ query_forms.prefix }}',
+    adminStaticPrefix: '{% static "admin/" %}',
+    deleteText: "{% trans "Remove" %}",
+    addText: "{% trans "Add" %}"
+  });
+})(django.jQuery);
+</script>
+        {% endblock search %}
         {% if applied_facets %}
         <div class="xfull">
         <ul class="toplinks">

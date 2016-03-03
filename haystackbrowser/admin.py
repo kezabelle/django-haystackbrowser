@@ -1,3 +1,4 @@
+from django.contrib.admin.templatetags.admin_static import static
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, InvalidPage
 from haystack.exceptions import SearchBackendError
@@ -26,7 +27,7 @@ from haystack import __version__
 from haystack.query import SearchQuerySet
 from haystack.forms import model_choices
 from haystackbrowser.models import HaystackResults, SearchResultWrapper, FacetWrapper
-from haystackbrowser.forms import PreSelectedModelSearchForm
+from haystackbrowser.forms import PreSelectedModelSearchForm, QueryFormFormSet
 from haystackbrowser.utils import get_haystack_settings
 from django.forms import Media
 try:
@@ -300,6 +301,7 @@ class HaystackResultsAdmin(object):
 
         page_var = self.get_paginator_var(request)
         form = PreSelectedModelSearchForm(request.GET or None, load_all=False)
+        query_forms = QueryFormFormSet(prefix='queries')
         minimum_page = form.fields[page_var].min_value
         # Make sure there are some models indexed
         available_models = model_choices()
@@ -368,6 +370,7 @@ class HaystackResultsAdmin(object):
             'app_label': self.model._meta.app_label,
             'filtered': True,
             'form': form,
+            'query_forms': query_forms,
             'form_valid': form.is_valid(),
             'query_string': self.get_current_query_string(request, remove=[page_var]),
             'search_model_count': len(cleaned_GET.getlist('models')),
@@ -379,11 +382,10 @@ class HaystackResultsAdmin(object):
             'module_name': force_text(self.model._meta.verbose_name_plural),
             'cl': FakeChangeListForPaginator(request, page, results_per_page, self.model._meta),
             'haystack_version': _haystack_version,
-            # Note: the empty Media object isn't specficially required for the
-            # standard Django admin, but is apparently a pre-requisite for
-            # things like Grappelli.
-            # See #1 (https://github.com/kezabelle/django-haystackbrowser/pull/1)
-            'media': Media()
+            'media': Media(js=[static('admin/js/%s' % url) for url in (
+                'jquery.min.js',
+                'jquery.init.js',
+                'inlines.js')])
         }
         return self.do_render(request=request,
                               template_name='admin/haystackbrowser/result_list.html',

@@ -3,7 +3,8 @@ from django.core.exceptions import ValidationError
 from django.http import QueryDict
 from django.template.defaultfilters import yesno
 from django.forms import (MultipleChoiceField, CheckboxSelectMultiple,
-                          ChoiceField, HiddenInput, IntegerField)
+                          ChoiceField, HiddenInput, IntegerField, CharField,
+                          Form, formset_factory)
 from django.utils.translation import ugettext_lazy as _
 try:
     from django.forms.utils import ErrorDict
@@ -38,6 +39,25 @@ class SelectedFacetsField(MultipleChoiceField):
         facet_name, sep, facet_value = value.partition(':')
 
         return facet_name in self.possible_facets
+
+
+class QueryForm(Form):
+    filter_type = ChoiceField(choices=(
+        ('AND', _('and')),
+        ('OR', _('or')),
+    ))
+    field = ChoiceField(choices=())
+    lookup = ChoiceField(choices=())
+    value = CharField()
+
+    def __init__(self, *args, **kwargs):
+        super(QueryForm, self).__init__(*args, **kwargs)
+        self.haystack_config = HaystackConfig()
+        if 'lookup' in self.fields:
+            self.fields['lookup'].choices = self.haystack_config.get_valid_filters()
+
+
+QueryFormFormSet = formset_factory(form=QueryForm, can_delete=False)
 
 
 class PreSelectedModelSearchForm(ModelSearchForm):
