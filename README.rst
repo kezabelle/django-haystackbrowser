@@ -127,7 +127,7 @@ Using pip
 The best way to grab the package is using ``pip`` to grab latest release from
 `PyPI`_::
 
-    pip install django-haystackbrowser==0.6.0
+    pip install django-haystackbrowser==0.6.1
 
 The alternative is to use ``pip`` to install the master branch in ``git``::
 
@@ -135,9 +135,9 @@ The alternative is to use ``pip`` to install the master branch in ``git``::
 
 Any missing dependencies will be resolved by ``pip`` automatically.
 
-If you want the last release (0.6.0), such as it is, you can do::
+If you want the last release (0.6.1), such as it is, you can do::
 
-    pip install git+https://github.com/kezabelle/django-haystackbrowser.git@0.6.0#egg=django-haystackbrowser
+    pip install git+https://github.com/kezabelle/django-haystackbrowser.git@0.6.1#egg=django-haystackbrowser
 
 You can find all previous releases `tagged on GitHub`_
 
