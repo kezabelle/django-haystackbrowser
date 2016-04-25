@@ -17,6 +17,7 @@
 .. _REPL to inspect the SearchQuerySet: http://django-haystack.readthedocs.org/en/latest/debugging.html#no-results-found-on-the-web-page
 .. _ticket 21056: https://code.djangoproject.com/ticket/21056
 .. _tagged on GitHub: https://github.com/kezabelle/django-haystackbrowser/tags
+.. _my laziness: https://github.com/kezabelle/django-haystackbrowser/issues/6
 
 .. title:: About
 
@@ -117,13 +118,18 @@ template tags, which are entirely optional.
 Installation
 ------------
 
-The only method of installation currently is via `git`_, as I've no intention of
-polluting `PyPI`_ unless the app is provably not complete rubbish.
+It's taken many years of `my laziness`_ to get around to it, but it is now
+possible to get the package from `PyPI`_.
 
 Using pip
 ^^^^^^^^^
 
-The best way to grab the package is using ``pip`` to install via ``git``::
+The best way to grab the package is using ``pip`` to grab latest release from
+`PyPI`_::
+
+    pip install django-haystackbrowser==0.6.0
+
+The alternative is to use ``pip`` to install the master branch in ``git``::
 
     pip install git+https://github.com/kezabelle/django-haystackbrowser.git#egg=django-haystackbrowser
 
@@ -235,12 +241,11 @@ TODO
 Known issues
 ------------
 
- * The links to the app admin may not actually work, because the app may not be
-   mounted onto the AdminSite, but passing pretty much anything to the
-   AdminSite app_list urlpattern will result in a valid URL. The other URLs
-   should only ever work if they're mounted, though.
-   This should be fixed in `Django`_ 1.7 though, assuming `ticket 21056`_ doesn't
-   need reverting for any unforseen reason.
+ * Prior to `Django`_ 1.7, the links to the app admin may not actually work,
+   because the linked app may not be mounted onto the AdminSite, but passing
+   pretty much anything to the AdminSite app_list urlpattern will result in
+   a valid URL. The other URLs should only ever work if they're mounted, though.
+   See `ticket 21056`_ for the change.
 
 The license
 -----------
