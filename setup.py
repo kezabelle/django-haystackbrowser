@@ -71,6 +71,12 @@ TROVE_CLASSIFIERS = [
     'Topic :: Internet :: WWW/HTTP :: Site Management',
     'Topic :: Database :: Front-Ends',
     'License :: OSI Approved :: BSD License',
+    'Framework :: Django',
+    'Framework :: Django :: 1.4',
+    'Framework :: Django :: 1.5',
+    'Framework :: Django :: 1.6',
+    'Framework :: Django :: 1.7',
+    'Framework :: Django :: 1.8',
 ]
 
 PACKAGES = find_packages()
