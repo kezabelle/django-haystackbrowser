@@ -12,7 +12,10 @@ except ImportError:
     except ImportError:  # Django 1.3.x
         from .tests_compat import override_settings
 from haystackbrowser.forms import PreSelectedModelSearchForm
-from mock import patch, Mock
+try:
+    from unittest.mock import patch, Mock
+except ImportError:  # < python 3.3
+    from mock import patch, Mock
 
 skip_old_haystack = pytest.mark.skipif(settings.OLD_HAYSTACK is True,
                                   reason="Doesn't apply to Haystack 1.2.x")
