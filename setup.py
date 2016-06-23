@@ -3,6 +3,9 @@ import os
 import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
+if sys.version_info[0] == 2:
+    # get the Py3K compatible `encoding=` for opening files.
+    from io import open
 
 
 class PyTest(TestCommand):
@@ -47,7 +50,7 @@ def make_readme(root_path):
     for filename in consider_files:
         filepath = os.path.realpath(os.path.join(root_path, filename))
         if os.path.isfile(filepath):
-            with open(filepath, mode='r') as f:
+            with open(filepath, mode='r', encoding="utf-8") as f:
                 yield f.read()
 
 
