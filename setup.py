@@ -85,7 +85,7 @@ setup(
     license="BSD License",
     keywords="django",
     zip_safe=False,
-    long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
+    long_description=LONG_DESCRIPTION,
     url='https://github.com/kezabelle/django-haystackbrowser/tree/master',
     packages=PACKAGES,
     install_requires=[
