@@ -55,8 +55,7 @@ def make_readme(root_path):
 
 
 HERE = os.path.abspath(os.path.dirname(__file__))
-SHORT_DESC = """A reusable Django application for viewing and debugging
-all the data that has been pushed into Haystack"""
+SHORT_DESC = """A reusable Django application for viewing and debugging all the data that has been pushed into Haystack"""
 LONG_DESCRIPTION = "\r\n\r\n----\r\n\r\n".join(make_readme(HERE))
 
 
