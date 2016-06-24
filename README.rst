@@ -26,6 +26,19 @@ django-haystackbrowser
 
 :author: Keryn Knight
 
+.. |travis_stable| image:: https://travis-ci.org/kezabelle/django-haystackbrowser.svg?branch=0.6.1
+  :target: https://travis-ci.org/kezabelle/django-haystackbrowser/branches
+
+.. |travis_master| image:: https://travis-ci.org/kezabelle/django-haystackbrowser.svg?branch=master
+  :target: https://travis-ci.org/kezabelle/django-haystackbrowser/branches
+
+==============  ======
+Release         Status
+==============  ======
+stable (0.6.1)  |travis_stable|
+master          |travis_master|
+==============  ======
+
 In brief
 --------
 
