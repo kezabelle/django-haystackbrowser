@@ -97,17 +97,18 @@ setup(
     url='https://github.com/kezabelle/django-haystackbrowser/tree/master',
     packages=PACKAGES,
     install_requires=[
-        'Django>=1.3.1',
+        # as of now, django-haystack's latest version is 2.5.0, and explicitly
+        # doesn't support Django 1.10+
+        'Django>=1.3.1,<1.10',
         'django-haystack>=1.2.0',
         'django-classy-tags>=0.3.4.1',
     ],
     tests_require=[
-        'django-haystack>=1.2.0',
-        'pytest>=2.6.4',
-        'pytest-cov>=1.8.1',
-        'pytest-django>=2.8.0',
-        'pytest-mock>=0.11.0',
-        'pytest-remove-stale-bytecode>=1.0',
+        'pytest==2.9.2',
+        'pytest-cov==2.2.1',
+        'pytest-django==2.9.1',
+        'pytest-mock==1.1',
+        'pytest-remove-stale-bytecode==2.1',
     ],
     cmdclass={'test': PyTest, 'tox': Tox},
     classifiers=TROVE_CLASSIFIERS,
