@@ -97,3 +97,15 @@ def test_detailview_no_result(mocker, detailview):
     mocker.patch('haystack.query.SearchQuerySet.filter').return_value = []
     with pytest.raises(Search404):
         detailview()
+
+
+def test_GH15_detailview_mlt_attributeerror_is_handled(mocker, detailview):
+    mocker.patch('haystack.query.SearchQuerySet.filter').return_value = [mocker.Mock()]
+    msg = "MLT failed because the haystack ES1 backend is using the 2.x " \
+          "version of elasticsearch-py which does not have a .mlt method"
+    mocker.patch('haystack.query.SearchQuerySet.more_like_this').side_effect = AttributeError(msg)
+    # Refs #GH-15 - calling .more_like_this(...) should raise an AttributeError
+    # to emulate the ES1-haystack-backend with ES2.x library situation, but
+    # it should not be promoted to a userland exception and should instead
+    # be silenced...
+    detailview()

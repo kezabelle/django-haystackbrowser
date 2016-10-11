@@ -1,3 +1,4 @@
+import logging
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, InvalidPage
 from haystack.exceptions import SearchBackendError
@@ -36,6 +37,7 @@ except ImportError:  # really old haystack, early in 1.2 series?
     DJANGO_ID = 'django_id'
 
 _haystack_version = '.'.join([str(x) for x in __version__])
+logger = logging.getLogger(__name__)
 
 def get_query_string(query_params, new_params=None, remove=None):
     # TODO: make this bettererer. Use propery dicty stuff on the Querydict?
@@ -421,7 +423,19 @@ class HaystackResultsAdmin(object):
         # by the search backend.
         model_instance = sqs.object.object
         if model_instance is not None:
-            raw_mlt = SearchQuerySet().more_like_this(model_instance)[:5]
+            # Refs #GH-15 - elasticsearch-py 2.x does not implement a .mlt
+            # method, but currently there's nothing in haystack-proper which
+            # prevents using the 2.x series with the haystack-es1 backend.
+            # At some point haystack will have a separate es backend ...
+            # and I have no idea if/how I'm going to support that.
+            try:
+                raw_mlt = SearchQuerySet().more_like_this(model_instance)[:5]
+            except AttributeError as e:
+                logger.debug("Support for 'more like this' functionality was "
+                             "not found, possibly because you're using "
+                             "the elasticsearch-py 2.x series with haystack's "
+                             "ES1.x backend", exc_info=1, extra={'request': request})
+                raw_mlt = ()
             more_like_this = self.get_wrapped_search_results(raw_mlt)
 
         form = PreSelectedModelSearchForm(request.GET or None, load_all=False)
