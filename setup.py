@@ -97,11 +97,12 @@ setup(
     url='https://github.com/kezabelle/django-haystackbrowser/tree/master',
     packages=PACKAGES,
     install_requires=[
+        'django-classy-tags>=0.3.4.1',
         # as of now, django-haystack's latest version is 2.5.0, and explicitly
         # doesn't support Django 1.10+
-        'Django>=1.3.1,<1.10',
+        # So, we put this last, to ensure that it pegs the maximum version
+        # where packages with looser requirements may say otherwise.
         'django-haystack>=1.2.0',
-        'django-classy-tags>=0.3.4.1',
     ],
     tests_require=[
         'pytest==2.9.2',
