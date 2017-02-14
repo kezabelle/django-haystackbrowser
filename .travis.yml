@@ -20,6 +20,7 @@ env:
  - TOX_ENV=py27-dj17
  - TOX_ENV=py27-dj18
  - TOX_ENV=py27-dj19
+ - TOX_ENV=py27-dj110
  - TOX_ENV=py33-dj15
  - TOX_ENV=py33-dj16
  - TOX_ENV=py33-dj17
@@ -29,8 +30,10 @@ env:
  - TOX_ENV=py34-dj17
  - TOX_ENV=py34-dj18
  - TOX_ENV=py34-dj19
+ - TOX_ENV=py34-dj110
  - TOX_ENV=py35-dj18
  - TOX_ENV=py35-dj19
+ - TOX_ENV=py35-dj110
 
 script:
   - tox -e $TOX_ENV
