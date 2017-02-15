@@ -39,6 +39,9 @@ stable (0.6.1)  |travis_stable|
 master          |travis_master|
 ==============  ======
 
+.. contents:: Sections
+    :depth: 2
+
 In brief
 --------
 
@@ -59,6 +62,51 @@ This application, a minor abuse of the `Django administration`_, aims to solve t
 by providing a familiar interface in which to query and browse the data, in a
 developer-friendly way.
 
+.. _requirements:
+
+Requirements and dependencies
+-----------------------------
+
+django-haystackbrowser should hopefully run on:
+
+  * **Django 1.3.1** or higher;
+  * **Haystack 1.2** or higher (including **2.x**)
+
+It additionally depends on ``django-classy-tags``, though only to use the provided
+template tags, which are entirely optional.
+
+Supported versions
+^^^^^^^^^^^^^^^^^^
+
+In theory, the below should work, based on a few minimal sanity-checking
+tests; if any of them don't, please open a ticket on the `issue tracker`_.
+
++--------+-----------------------------+
+| Django | Python                      |
++--------+-------+-----+-------+-------+
+|        | 2.7   | 3.3 | 3.4   | 3.5   |
++--------+-------+-----+-------+-------+
+| 1.3.x  | Yup   |     |       |       |
++--------+-------+-----+-------+-------+
+| 1.4.x  | Yup   |     |       |       |
++--------+-------+-----+-------+-------+
+| 1.5.x  | Yup   | Yup |       |       |
++--------+-------+-----+-------+-------+
+| 1.6.x  | Yup   | Yup | Yup   |       |
++--------+-------+-----+-------+-------+
+| 1.7.x  | Yup   | Yup | Yup   |       |
++--------+-------+-----+-------+-------+
+| 1.8.x  | Yup   | Yup | Yup   | Yup   |
++--------+-------+-----+-------+-------+
+| 1.9.x  | Yup   |     | Yup   | Yup   |
++--------+-------+-----+-------+-------+
+| 1.10.x | Maybe |     | Maybe | Maybe |
++--------+-------+-----+-------+-------+
+
+Any instances of **Maybe** are because I haven't personally used it on that,
+version, nor have I had anyone report problems with it which would indicate a
+lack of support.
+
 What it does
 ------------
 
@@ -67,8 +115,6 @@ must be ``True``) has a new application available in the standard admin index.
 
 There are two views, an overview for browsing and searching, and another for
 inspecting the data found for an individual object.
-
-.. _the_views:
 
 List view
 ^^^^^^^^^
@@ -113,21 +159,6 @@ up the stored data view, which is the most useful part of it.
 The stored data view, like the list view, provides links to the relevant admin
 pages for the app/model/instance if appropriate.
 
-.. _requirements:
-
-Requirements and dependencies
------------------------------
-
-django-haystackbrowser should hopefully run on:
-
-  * **Django 1.3.1** or higher;
-  * **Haystack 1.2** or higher (including **2.x**!)
-
-It additionally depends on ``django-classy-tags``, though only to use the provided
-template tags, which are entirely optional.
-
-.. _installation:
-
 Installation
 ------------
 
@@ -162,8 +193,6 @@ If you're not using ``pip``, you can get the latest version::
     git clone https://github.com/kezabelle/django-haystackbrowser.git
 
 and then make sure the ``haystackbrowser`` package is on your python path.
-
-.. _usage:
 
 Usage
 -----
@@ -218,8 +247,6 @@ templates and adapt them for your own needs.
     and access to the ``original`` object being edited, so nothing will appear on
     the add screens.
 
-.. _contributing:
-
 Contributing
 ------------
 
@@ -233,7 +260,7 @@ Bug reports and feature requests can be filed on the repository's `issue tracker
 If something can be discussed in 140 character chunks, there's also `my Twitter account`_.
 
 Contributors
-------------
+^^^^^^^^^^^^
 
 The following people have been of help, in some capacity.
 
