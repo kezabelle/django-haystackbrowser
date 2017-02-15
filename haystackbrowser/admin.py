@@ -168,11 +168,12 @@ class HaystackResultsAdmin(object):
         """Sets up the required urlconf for the admin views."""
         try:
             # > 1.5
-            from django.conf.urls import patterns, url
+            from django.conf.urls import url
+            def patterns(prefix, *args):
+                return list(args)  # must be a list, not a tuple, because Django.
         except ImportError as e:
             # < 1.5
             from django.conf.urls.defaults import patterns, url
-
 
         def wrap(view):
             def wrapper(*args, **kwargs):
