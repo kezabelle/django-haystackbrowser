@@ -24,7 +24,7 @@ django-haystackbrowser
 
 :author: Keryn Knight
 
-.. |travis_stable| image:: https://travis-ci.org/kezabelle/django-haystackbrowser.svg?branch=0.6.1
+.. |travis_stable| image:: https://travis-ci.org/kezabelle/django-haystackbrowser.svg?branch=0.6.2
   :target: https://travis-ci.org/kezabelle/django-haystackbrowser/branches
 
 .. |travis_master| image:: https://travis-ci.org/kezabelle/django-haystackbrowser.svg?branch=master
@@ -33,7 +33,7 @@ django-haystackbrowser
 ==============  ======
 Release         Status
 ==============  ======
-stable (0.6.1)  |travis_stable|
+stable (0.6.2)  |travis_stable|
 master          |travis_master|
 ==============  ======
 
@@ -169,7 +169,7 @@ Using pip
 The best way to grab the package is using ``pip`` to grab latest release from
 `PyPI`_::
 
-    pip install django-haystackbrowser==0.6.1
+    pip install django-haystackbrowser==0.6.2
 
 The alternative is to use ``pip`` to install the master branch in ``git``::
 
@@ -177,9 +177,9 @@ The alternative is to use ``pip`` to install the master branch in ``git``::
 
 Any missing dependencies will be resolved by ``pip`` automatically.
 
-If you want the last release (0.6.1), such as it is, you can do::
+If you want the last release (0.6.2), such as it is, you can do::
 
-    pip install git+https://github.com/kezabelle/django-haystackbrowser.git@0.6.1#egg=django-haystackbrowser
+    pip install git+https://github.com/kezabelle/django-haystackbrowser.git@0.6.2#egg=django-haystackbrowser
 
 You can find all previous releases `tagged on GitHub`_
 
