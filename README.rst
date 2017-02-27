@@ -2,11 +2,9 @@
 .. _Haystack: http://www.haystacksearch.org/
 .. _Django administration: https://docs.djangoproject.com/en/dev/ref/contrib/admin/
 .. _GitHub: https://github.com/
-.. _git: http://git-scm.com/
 .. _PyPI: http://pypi.python.org/pypi
 .. _kezabelle/django-haystackbrowser: https://github.com/kezabelle/django-haystackbrowser/
 .. _master: https://github.com/kezabelle/django-haystackbrowser/tree/master
-.. _develop: https://github.com/kezabelle/django-haystackbrowser/tree/develop
 .. _issue tracker: https://github.com/kezabelle/django-haystackbrowser/issues/
 .. _my Twitter account: https://twitter.com/kezabelle/
 .. _FreeBSD: http://en.wikipedia.org/wiki/BSD_licenses#2-clause_license_.28.22Simplified_BSD_License.22_or_.22FreeBSD_License.22.29
