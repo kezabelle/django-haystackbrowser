@@ -29,6 +29,17 @@ def detailview(admin_user, rf):
     yield partial(match.func, request, *match.args, **match.kwargs)
 
 
+def test_views_resolve_correctly():
+    list_url = reverse('admin:haystackbrowser_haystackresults_changelist')
+    detail_url = reverse('admin:haystackbrowser_haystackresults_change',
+                  kwargs={'content_type': 1, 'pk': 1})
+    assert list_url == '/admin/haystackbrowser/haystackresults/'
+    assert detail_url == '/admin/haystackbrowser/haystackresults/1/1/'
+    list_view = resolve(list_url)
+    detail_view = resolve(detail_url)
+
+
+
 def test_detailview_has_view_result_but_fails_because_mlt(mocker, detailview):
     """
     Gets as far as:
