@@ -110,6 +110,7 @@ setup(
         'pytest-django==2.9.1',
         'pytest-mock==1.1',
         'pytest-remove-stale-bytecode==2.1',
+        'Whoosh',
     ],
     cmdclass={'test': PyTest, 'tox': Tox},
     classifiers=TROVE_CLASSIFIERS,
