@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
+import sys
+PY3 = sys.version_info[0] == 3
+if PY3:
+    string_types = str,
+else:
+    string_types = basestring,
 from django.conf import settings
 from django.core.management.commands.diffsettings import module_to_dict
 import logging
@@ -132,6 +138,8 @@ class HaystackConfig(object):
 
 def cleanse_setting_value(setting_value):
     """ do not show user:pass in https://user:pass@domain.com settings values """
+    if not isinstance(setting_value, string_types):
+        return setting_value
     return re.sub(r'//(.*:.*)@', '//********:********@', setting_value)
 
 
