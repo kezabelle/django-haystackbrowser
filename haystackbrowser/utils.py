@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from django.conf import settings
 from django.core.management.commands.diffsettings import module_to_dict
 import logging
@@ -129,6 +130,11 @@ class HaystackConfig(object):
                      if filter in names)
 
 
+def cleanse_setting_value(setting_value):
+    """ do not show user:pass in https://user:pass@domain.com settings values """
+    return re.sub(r'//(.*:.*)@', '//********:********@', setting_value)
+
+
 def get_haystack_settings():
     """
     Find all settings which are prefixed with `HAYSTACK_`
@@ -141,7 +147,7 @@ def get_haystack_settings():
         for named_backend, values in connections.items():
             for setting_name, setting_value in values.items():
                 setting_name = setting_name.replace('_', ' ')
-                filtered_settings.append((setting_name, setting_value, named_backend))
+                filtered_settings.append((setting_name, cleanse_setting_value(setting_value), named_backend))
     except KeyError as e:
         # 1.x style, where everything is a separate setting.
         searching_for = u'HAYSTACK_'
@@ -149,5 +155,5 @@ def get_haystack_settings():
         for setting_name, setting_value in all_settings.items():
             if setting_name.startswith(searching_for):
                 setting_name = setting_name.replace(searching_for, '').replace('_', ' ')
-                filtered_settings.append((setting_name, setting_value))
+                filtered_settings.append((setting_name, cleanse_setting_value(setting_value)))
     return filtered_settings
