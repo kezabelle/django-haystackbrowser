@@ -12,6 +12,7 @@
 .. _David Novakovic: http://blog.dpn.name/
 .. _Francois Lebel: http://flebel.com/
 .. _Jussi Räsänen: http://skyred.fi/
+.. _Michaël Krens: https://github.com/michi88/
 .. _REPL to inspect the SearchQuerySet: http://django-haystack.readthedocs.org/en/latest/debugging.html#no-results-found-on-the-web-page
 .. _ticket 21056: https://code.djangoproject.com/ticket/21056
 .. _tagged on GitHub: https://github.com/kezabelle/django-haystackbrowser/tags
@@ -269,6 +270,7 @@ The following people have been of help, in some capacity.
  * `Francois Lebel`_, for various fixes.
  * `Jussi Räsänen`_, for various fixes.
  * Vadim Markovtsev, for minor fix related to Django 1.8+.
+ * `Michaël Krens`_, for various fixes.
 
 TODO
 ----
