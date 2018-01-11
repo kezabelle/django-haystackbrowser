@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
+import django
 import pytest
 from functools import partial
 from django.conf import settings
@@ -63,7 +64,8 @@ def test_detailview_has_view_result_templateresponse(mocker, detailview):
     from django.template.response import TemplateResponse
     assert isinstance(response, TemplateResponse) is True
     assert response.status_code == 200
-    assert sorted(response.context_data.keys()) == [
+    context_keys = set(response.context_data.keys())
+    assert context_keys.issuperset({
         'app_label',
         'form',
         'form_valid',
@@ -74,7 +76,13 @@ def test_detailview_has_view_result_templateresponse(mocker, detailview):
         'original',
         'similar_objects',
         'title'
-    ]
+    })
+    if django.VERSION[0:2] >= (1, 7):
+        assert 'site_header' in context_keys
+        assert 'site_title' in context_keys
+    else:
+        assert 'site_header' not in context_keys
+        assert 'site_title' not in context_keys
     assert response.context_data['form_valid'] is False
     assert response.context_data['has_change_permission'] is True
     assert len(response.context_data['similar_objects']) == 2

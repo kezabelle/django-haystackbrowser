@@ -1,4 +1,5 @@
 import logging
+from inspect import getargspec
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, InvalidPage
 from haystack.exceptions import SearchBackendError
@@ -289,6 +290,16 @@ class HaystackResultsAdmin(object):
             return render_to_response(template_name=template_name, context=context,
                                       context_instance=RequestContext(request))
 
+    def each_context_compat(self, request):
+        # Django didn't always have an AdminSite.each_context method.
+        if not hasattr(self.admin_site, 'each_context'):
+            return {}
+        method_sig = getargspec(self.admin_site.each_context)
+        # Django didn't always pass along request.
+        if 'request' in method_sig.args:
+            return self.admin_site.each_context(request)
+        return self.admin_site.each_context()
+
     def index(self, request):
         """The view for showing all the results in the Haystack index. Emulates
         the standard Django ChangeList mostly.
@@ -388,6 +399,8 @@ class HaystackResultsAdmin(object):
             # See #1 (https://github.com/kezabelle/django-haystackbrowser/pull/1)
             'media': Media()
         }
+        # Update the context with variables that should be available to every page
+        context.update(self.each_context_compat(request))
         return self.do_render(request=request,
                               template_name='admin/haystackbrowser/result_list.html',
                               context=context)
@@ -454,6 +467,8 @@ class HaystackResultsAdmin(object):
             'form': form,
             'form_valid': form_valid,
         }
+        # Update the context with variables that should be available to every page
+        context.update(self.each_context_compat(request))
         return self.do_render(request=request,
                               template_name='admin/haystackbrowser/view.html',
                               context=context)
