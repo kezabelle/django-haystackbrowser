@@ -1,5 +1,4 @@
 language: python
-python: 3.5
 sudo: false
 
 notifications:
@@ -34,6 +33,9 @@ env:
  - TOX_ENV=py35-dj18
  - TOX_ENV=py35-dj19
  - TOX_ENV=py35-dj110
+ - TOX_ENV=py36-dj110
+ - TOX_ENV=py36-dj111
+ - TOX_ENV=py36-dj20
 
 script:
   - tox -e $TOX_ENV
