@@ -17,6 +17,7 @@
 .. _ticket 21056: https://code.djangoproject.com/ticket/21056
 .. _tagged on GitHub: https://github.com/kezabelle/django-haystackbrowser/tags
 .. _my laziness: https://github.com/kezabelle/django-haystackbrowser/issues/6
+.. _Anton Shurashov: https://github.com/Sinkler/
 
 .. title:: About
 
@@ -275,6 +276,7 @@ The following people have been of help, in some capacity.
  * `Jussi Räsänen`_, for various fixes.
  * Vadim Markovtsev, for minor fix related to Django 1.8+.
  * `Michaël Krens`_, for various fixes.
+ * `Anton Shurashov`_, for fixes related to Django 2.0.
 
 TODO
 ----
