@@ -17,6 +17,7 @@
 .. _ticket 21056: https://code.djangoproject.com/ticket/21056
 .. _tagged on GitHub: https://github.com/kezabelle/django-haystackbrowser/tags
 .. _my laziness: https://github.com/kezabelle/django-haystackbrowser/issues/6
+.. _Anton Shurashov: https://github.com/Sinkler/
 
 .. title:: About
 
@@ -80,27 +81,31 @@ Supported versions
 In theory, the below should work, based on a few minimal sanity-checking
 tests; if any of them don't, please open a ticket on the `issue tracker`_.
 
-+--------+-----------------------------+
-| Django | Python                      |
-+--------+-------+-----+-------+-------+
-|        | 2.7   | 3.3 | 3.4   | 3.5   |
-+--------+-------+-----+-------+-------+
-| 1.3.x  | Yup   |     |       |       |
-+--------+-------+-----+-------+-------+
-| 1.4.x  | Yup   |     |       |       |
-+--------+-------+-----+-------+-------+
-| 1.5.x  | Yup   | Yup |       |       |
-+--------+-------+-----+-------+-------+
-| 1.6.x  | Yup   | Yup | Yup   |       |
-+--------+-------+-----+-------+-------+
-| 1.7.x  | Yup   | Yup | Yup   |       |
-+--------+-------+-----+-------+-------+
-| 1.8.x  | Yup   | Yup | Yup   | Yup   |
-+--------+-------+-----+-------+-------+
-| 1.9.x  | Yup   |     | Yup   | Yup   |
-+--------+-------+-----+-------+-------+
-| 1.10.x | Maybe |     | Maybe | Maybe |
-+--------+-------+-----+-------+-------+
++--------+-------------------------------------+
+| Django | Python                              |
++--------+-------+-----+-------+-------+-------+
+|        | 2.7   | 3.3 | 3.4   | 3.5   | 3.6   |
++--------+-------+-----+-------+-------+-------+
+| 1.3.x  | Yup   |     |       |       |       |
++--------+-------+-----+-------+-------+-------+
+| 1.4.x  | Yup   |     |       |       |       |
++--------+-------+-----+-------+-------+-------+
+| 1.5.x  | Yup   | Yup |       |       |       |
++--------+-------+-----+-------+-------+-------+
+| 1.6.x  | Yup   | Yup | Yup   |       |       |
++--------+-------+-----+-------+-------+-------+
+| 1.7.x  | Yup   | Yup | Yup   |       |       |
++--------+-------+-----+-------+-------+-------+
+| 1.8.x  | Yup   | Yup | Yup   | Yup   |       |
++--------+-------+-----+-------+-------+-------+
+| 1.9.x  | Yup   |     | Yup   | Yup   |       |
++--------+-------+-----+-------+-------+-------+
+| 1.10.x | Maybe |     | Maybe | Yup   | Maybe |
++--------+-------+-----+-------+-------+-------+
+| 1.11.x | Maybe |     | Maybe | Yup   | Maybe |
++--------+-------+-----+-------+-------+-------+
+| 2.0.x  |       |     | Maybe | Maybe | Yup   |
++--------+-------+-----+-------+-------+-------+
 
 Any instances of **Maybe** are because I haven't personally used it on that,
 version, nor have I had anyone report problems with it which would indicate a
@@ -271,6 +276,7 @@ The following people have been of help, in some capacity.
  * `Jussi Räsänen`_, for various fixes.
  * Vadim Markovtsev, for minor fix related to Django 1.8+.
  * `Michaël Krens`_, for various fixes.
+ * `Anton Shurashov`_, for fixes related to Django 2.0.
 
 TODO
 ----

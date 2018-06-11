@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-from copy import deepcopy
+
 try:
     from urllib import quote_plus
 except ImportError:  # > Python 3
@@ -16,9 +16,11 @@ except ImportError:  # < Django 1.5
     from django.utils.encoding import force_unicode as force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import strip_tags
-from django.core.urlresolvers import NoReverseMatch, reverse
+try:
+    from django.core.urlresolvers import NoReverseMatch, reverse
+except ImportError:  # >= Django 2.0
+    from django.urls import reverse, NoReverseMatch
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 
 
 logger = logging.getLogger(__name__)

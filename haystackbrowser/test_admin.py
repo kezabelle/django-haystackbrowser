@@ -6,7 +6,10 @@ from __future__ import division
 import pytest
 from functools import partial
 from django.conf import settings
-from django.core.urlresolvers import reverse, resolve
+try:
+    from django.core.urlresolvers import reverse, resolve
+except ImportError:  # >= Django 2.0
+    from django.urls import reverse, resolve
 from haystack.exceptions import SearchBackendError
 from haystackbrowser.admin import Search404
 from haystackbrowser.forms import PreSelectedModelSearchForm

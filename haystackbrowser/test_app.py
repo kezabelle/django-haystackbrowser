@@ -4,7 +4,10 @@ from __future__ import unicode_literals
 import pytest
 
 from django.conf import settings
-from django.core.urlresolvers import reverse, resolve
+try:
+    from django.core.urlresolvers import reverse, resolve
+except ImportError:  # >= Django 2.0
+    from django.urls import reverse, resolve
 from .admin import Search404
 
 
