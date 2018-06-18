@@ -388,6 +388,8 @@ class HaystackResultsAdmin(object):
             # See #1 (https://github.com/kezabelle/django-haystackbrowser/pull/1)
             'media': Media()
         }
+        # Update the context with variables that should be available to every page
+        context.update(dict(self.admin_site.each_context(request), ))
         return self.do_render(request=request,
                               template_name='admin/haystackbrowser/result_list.html',
                               context=context)
@@ -454,6 +456,8 @@ class HaystackResultsAdmin(object):
             'form': form,
             'form_valid': form_valid,
         }
+        # Update the context with variables that should be available to every page
+        context.update(dict(self.admin_site.each_context(request), ))
         return self.do_render(request=request,
                               template_name='admin/haystackbrowser/view.html',
                               context=context)
