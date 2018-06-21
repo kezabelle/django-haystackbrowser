@@ -203,6 +203,12 @@ class SearchResultWrapper(object):
     def __getattr__(self, attr):
         return getattr(self.object, attr)
 
+    def app_label(self):
+        try:
+            return self.object.model._meta.app_config.verbose_name
+        except AttributeError as e:
+            return self.object.app_label
+
 
 class FacetWrapper(object):
     """
