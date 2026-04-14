@@ -105,7 +105,7 @@ setup(
         'django-haystack>=1.2.0',
     ],
     tests_require=[
-        'pytest==2.9.2',
+        'pytest==9.0.3',
         'pytest-cov==2.2.1',
         'pytest-django==2.9.1',
         'pytest-mock==1.1',
